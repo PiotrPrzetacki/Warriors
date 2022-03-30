@@ -21,7 +21,7 @@ public class Warrior extends CharacterClass {
 
         /*this.setX(0);
         this.setY(0);*/
-        this.uploadImage("1.png", "2.png", "3.png");
+        this.uploadImage("1.png", "3.png", "2.png");
     }
 
     public void left() {

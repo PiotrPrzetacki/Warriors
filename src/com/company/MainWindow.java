@@ -11,6 +11,7 @@ public class MainWindow extends JFrame {
         int locationY = (int) ((screenSize.getHeight() - height) / 2);
         setLocation(locationX, locationY);*/
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(new GameField(team));
         setVisible(true);
     }

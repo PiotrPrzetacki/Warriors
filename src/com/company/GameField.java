@@ -70,7 +70,7 @@ public class GameField extends JPanel {
                     player.setAttackRightImage();
 
                     if (player.getX() < 300 && CharacterClass.occupiedCells[player.getX() + 40][player.getY()] > 0) {
-                        player.attack(players[CharacterClass.occupiedCells[player.getX() + 40][player.getY()]]);
+                        player.attack(players[CharacterClass.occupiedCells[player.getX() + 40][player.getY()]-1]);
                     }
 
                     //timer
