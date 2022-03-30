@@ -1,5 +1,6 @@
 package com.company.classes.characters;
 
+import com.company.Constants;
 import com.company.classes.AttackType;
 import com.company.classes.CharacterClass;
 
@@ -24,16 +25,16 @@ public class Mage  extends CharacterClass {
         this.uploadImage("1.png", "2.png", "3.png");*/
     }
     public void left() {
-        int newPositionX = this.getX() > 40 ?  this.getX() - 40 : 320;
+        int newPositionX = this.getX() > Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : 320;
     }
     public void right() {
-        int newPositionX = this.getX() < 320 ?  this.getX() + 40 : 0;
+        int newPositionX = this.getX() < 320 ?  this.getX() + Constants.CHARACTER_WIDTH : 0;
 
     }
     public void up() {
-        int newPositionY = this.getY() > 80 ?  this.getY() - 80 : 320;
+        int newPositionY = this.getY() > Constants.CHARACTER_HEIGHT ?  this.getY() - Constants.CHARACTER_HEIGHT : 320;
     }
     public void down() {
-        int newPositionY = this.getY() < 320 ?  this.getY() + 80 : 0;
+        int newPositionY = this.getY() < 320 ?  this.getY() + Constants.CHARACTER_HEIGHT : 0;
     }
 }
