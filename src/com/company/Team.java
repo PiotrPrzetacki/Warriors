@@ -34,6 +34,6 @@ public class Team {
     }
 
     public void runArena() {
-        MainWindow mw = new MainWindow(375, 438, this);
+        MainWindow mw = new MainWindow(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, this);
     }
 }
