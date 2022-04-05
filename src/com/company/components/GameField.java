@@ -1,5 +1,7 @@
-package com.company;
+package com.company.components;
 
+import com.company.Constants;
+import com.company.Team;
 import com.company.classes.CharacterClass;
 
 import javax.swing.*;
@@ -10,6 +12,7 @@ import java.awt.event.KeyEvent;
 public class GameField extends JPanel {
     private Team team;
     private CharacterClass[] players;
+
     public GameField(Team team) {
         this.team = team;
         this.players = team.getTeamMembers();
@@ -37,19 +40,15 @@ public class GameField extends JPanel {
             int key = e.getKeyCode();
             for (CharacterClass player : players) {
                 if (key == player.getLeftKey()) {
-                    //player.setX(player.getX() - Constants.CHARACTER_WIDTH);
                     player.left();
                 }
                 if (key == player.getRightKey()) {
-                    //player.setX(player.getX() + Constants.CHARACTER_WIDTH);
                     player.right();
                 }
                 if (key == player.getUpKey()) {
-                    //player.setY(player.getY() - Constants.CHARACTER_WIDTH);
                     player.up();
                 }
                 if (key == player.getDownKey()) {
-                    //player.setY(player.getY() + Constants.CHARACTER_WIDTH);
                     player.down();
                 }
                 if (key == player.getLeftAttackKey()) {
@@ -66,8 +65,8 @@ public class GameField extends JPanel {
                             new java.util.TimerTask() {
                                 @Override
                                 public void run() {
-                                    player.setBaseImage();
-                                    repaint();
+                                player.setBaseImage();
+                                repaint();
                                 }
                             }, 200
                     );
@@ -83,8 +82,8 @@ public class GameField extends JPanel {
                             new java.util.TimerTask() {
                                 @Override
                                 public void run() {
-                                    player.setBaseImage();
-                                    repaint();
+                                player.setBaseImage();
+                                repaint();
                                 }
                             }, 200
                     );

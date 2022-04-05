@@ -5,24 +5,20 @@ import com.company.classes.AttackType;
 import com.company.classes.CharacterClass;
 
 public class Warrior extends CharacterClass {
-   public Warrior(String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
+    public Warrior(String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
         super(name, x, y, leftKey, rightKey, upKey, downKey, leftAttackKey, rightAttackKey);
         this.setAttackAmount(100);
-       this.setMaxHealthPoints(1000);
-        setHealthPoints(1000);
-        this.className = "Warior";
-        /*this.setLevel(1);
         this.setMaxHealthPoints(1000);
         this.setHealthPoints(1000);
+        this.className = "Warior";
+        this.setLevel(1);
         this.setManaPoints(200);
         this.setMaxManaPoints(200);
         this.setAttackType(AttackType.PHYSICAL);
-        this.setAttackAmount(5);
-        this.setName(name);*/
-
-        /*this.setX(0);
-        this.setY(0);*/
-        this.uploadImage("1.png", "3.png", "2.png");
+        this.setName(name);
+        this.setX(0);
+        this.setY(0);
+        this.uploadImage("assets/images/WarriorBaseImage.png", "assets/images/WarriorAttackLeftImage.png", "assets/images/WarriorAttackRightImage.png");
     }
 
     public void left() {

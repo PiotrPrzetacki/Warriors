@@ -1,16 +1,16 @@
 package com.company;
 
 import com.company.classes.CharacterClass;
-import com.company.classes.arenas.Syberia;
+import com.company.classes.arenas.Arena;
 
 public class Team {
     private CharacterClass[] teamMembers;
+    private Arena arena;
 
-    public void setArena(Syberia arena) {
+    public void setArena(Arena arena) {
         this.arena = arena;
     }
 
-    private Syberia arena;
     public Team(CharacterClass... members) {
         teamMembers = new CharacterClass[members.length];
         for (int i = 0; i < teamMembers.length; i++) {
@@ -23,17 +23,8 @@ public class Team {
     }
 
     public void info(){
-        //for(int i = 0; i < teamMembers.length; i++){
         for(CharacterClass teamMembers : teamMembers){
             teamMembers.info();
         }
-    }
-
-    public boolean enterArena(Syberia arena1) {
-        return arena1.open(this);
-    }
-
-    public void runArena() {
-        MainWindow mw = new MainWindow(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, this);
     }
 }

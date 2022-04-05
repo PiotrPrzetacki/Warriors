@@ -22,7 +22,7 @@ public class Mage  extends CharacterClass {
 
         this.setX(300);
         this.setY(0);
-        this.uploadImage("1.png", "2.png", "3.png");*/
+        this.uploadImage("WarriorBaseImage.png", "WarriorAttackRightImage.png", "WarriorAttackLeftImage.png");*/
     }
     public void left() {
         int newPositionX = this.getX() > Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : 320;
