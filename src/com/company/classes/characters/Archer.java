@@ -44,4 +44,28 @@ public class Archer  extends CharacterClass {
         int newPositionY = this.getY() < 320 ?  this.getY() + Constants.CHARACTER_HEIGHT : 0;
         tryChangePosition(this.getX(), newPositionY);
     }
+
+    @Override
+    public void attack(String direction, CharacterClass[] players) {
+        if(direction.equals("left")){
+            if (this.getX() > 0 && CharacterClass.occupiedCells[this.getX() - Constants.CHARACTER_WIDTH][this.getY()] > 0) {
+                CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() - Constants.CHARACTER_WIDTH][this.getY()]-1];
+                attackedPlayer.reduceHealth(this.attackAmount);
+            }
+            else if(this.getX() > 0 && CharacterClass.occupiedCells[this.getX() - Constants.CHARACTER_WIDTH*2][this.getY()] > 0){
+                CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() - Constants.CHARACTER_WIDTH*2][this.getY()]-1];
+                attackedPlayer.reduceHealth(this.attackAmount);
+            }
+        }
+        else if(direction.equals("right")){
+            if (this.getX() > 0 && CharacterClass.occupiedCells[this.getX() + Constants.CHARACTER_WIDTH][this.getY()] > 0) {
+                CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() + Constants.CHARACTER_WIDTH][this.getY()] - 1];
+                attackedPlayer.reduceHealth(this.attackAmount);
+            }
+            else if(this.getX() > 0 && CharacterClass.occupiedCells[this.getX() + Constants.CHARACTER_WIDTH*2][this.getY()] > 0){
+                CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() + Constants.CHARACTER_WIDTH*2][this.getY()] - 1];
+                attackedPlayer.reduceHealth(this.attackAmount);
+            }
+        }
+    }
 }

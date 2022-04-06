@@ -1,5 +1,7 @@
 package com.company.classes;
 
+import com.company.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,12 +13,13 @@ public abstract class CharacterClass implements BaseClass {
     private int manaPoints;
     private int level;
     private AttackType attackType;
-    private int attackAmount;
+    protected int attackAmount;
     private String name;
     private int maxHealthPoints;
     private int maxManaPoints;
     private int leftKey, rightKey, upKey, downKey, leftAttackKey,rightAttackKey;
     protected  String className;
+    private boolean canMove;
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -31,6 +34,7 @@ public abstract class CharacterClass implements BaseClass {
         this.downKey = downKey;
         this.leftAttackKey = leftAttackKey;
         this.rightAttackKey = rightAttackKey;
+        this.canMove = true;
     }
 
     public void setHealthPoints(int healthPoints) {
@@ -118,9 +122,19 @@ public abstract class CharacterClass implements BaseClass {
     }
 
 
-    public void attack(CharacterClass attackedPlayer) {
-        attackedPlayer.reduceHealth(this.attackAmount);
-        System.out.println(this.className + " attacked " + attackedPlayer.className + " for " + this.attackAmount);
+    public void attack(String direction, CharacterClass[] players) {
+        if(direction.equals("left")){
+            if (this.getX() > 0 && CharacterClass.occupiedCells[this.getX() - Constants.CHARACTER_WIDTH][this.getY()] > 0) {
+                CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() - Constants.CHARACTER_WIDTH][this.getY()]-1];
+                attackedPlayer.reduceHealth(this.attackAmount);
+            }
+        }
+        else if(direction.equals("right")){
+            if (this.getX() > 0 && CharacterClass.occupiedCells[this.getX() + Constants.CHARACTER_WIDTH][this.getY()] > 0) {
+                CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() + Constants.CHARACTER_WIDTH][this.getY()] - 1];
+                attackedPlayer.reduceHealth(this.attackAmount);
+            }
+        }
     }
 
     @Override
@@ -180,6 +194,10 @@ public abstract class CharacterClass implements BaseClass {
         return y;
     }
 
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
+
     public void uploadImage(String baseImage, String attackLeftImage, String attackRightImage) {
         this.baseImage = new ImageIcon(baseImage).getImage();
         this.attackLeftImage = new ImageIcon(attackLeftImage).getImage();
@@ -224,17 +242,20 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void tryChangePosition(int newPositionX, int newPositionY) {
-        if (occupiedCells[newPositionX][newPositionY] == 0) {
-            occupiedCells[this.x][this.y] = 0;
-            occupiedCells[newPositionX][newPositionY] = this.number;
-            this.x = newPositionX;
-            this.y = newPositionY;
-        } else {
-            reduceHealth(50);
+        System.out.println("can move:"+canMove);
+        if(canMove) {
+            if (occupiedCells[newPositionX][newPositionY] == 0) {
+                occupiedCells[this.x][this.y] = 0;
+                occupiedCells[newPositionX][newPositionY] = this.number;
+                this.x = newPositionX;
+                this.y = newPositionY;
+            } else {
+                reduceHealth(50);
+            }
         }
     }
 
-    protected void reduceHealth(int amount) {
+    public void reduceHealth(int amount) {
         setHealthPoints(this.getHealthPoints() - amount);
     }
 

@@ -57,9 +57,9 @@ public class GameField extends JPanel {
 
                     player.setAttackLeftImage();
 
-                    if (player.getX() > 0 && CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] > 0) {
-                        player.attack(players[CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()]-1]);
-                    }
+                    player.attack("left", players);
+                    checkGameOver();
+
 
                     //timer
                     new java.util.Timer().schedule(
@@ -75,9 +75,8 @@ public class GameField extends JPanel {
                 if (key == player.getRightAttackKey()) {
                     player.setAttackRightImage();
 
-                    if (player.getX() < 300 && CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] > 0) {
-                        player.attack(players[CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()]-1]);
-                    }
+                    player.attack("right", players);
+                    checkGameOver();
 
                     //timer
                     new java.util.Timer().schedule(
@@ -92,6 +91,21 @@ public class GameField extends JPanel {
                 }
             }
             repaint();
+        }
+    }
+    private void checkGameOver(){
+        for(CharacterClass player : players){
+            if(player.getHealthPoints()<=0){
+                setPlayersCanMove(false);
+
+                break;
+            }
+        }
+    }
+
+    private void setPlayersCanMove(boolean canMove){
+        for(CharacterClass player : players){
+            player.setCanMove(canMove);
         }
     }
 }
