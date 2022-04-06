@@ -98,6 +98,22 @@ public class GameField extends JPanel {
             if(player.getHealthPoints()<=0){
                 setPlayersCanMove(false);
 
+                new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            for(CharacterClass player : players){
+                                int newX = (((int) (Math.random() * CharacterClass.occupiedCells[0].length)) / 40) *40;
+                                int newY = (((int) (Math.random() * CharacterClass.occupiedCells.length)) / 40) *40;
+                                player.setHealthPoints(player.getMaxHealthPoints());
+                                player.setX(newX);
+                                player.setY(newY);
+                                setPlayersCanMove(true);
+                            }
+                            repaint();
+                        }
+                    }, 2000
+                );
                 break;
             }
         }

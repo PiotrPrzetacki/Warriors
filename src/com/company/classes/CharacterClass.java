@@ -38,7 +38,6 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void setHealthPoints(int healthPoints) {
-        System.out.println("SET HP1 " + healthPoints);
         if (healthPoints < 0) {
             this.healthPoints = 0;
         } else if (healthPoints > this.maxHealthPoints) {
@@ -47,7 +46,6 @@ public abstract class CharacterClass implements BaseClass {
         else {
             this.healthPoints = healthPoints;
         }
-        System.out.println("SET HP2 " + this.healthPoints);
     }
 
     public void setManaPoints(int manaPoints) {
@@ -242,7 +240,6 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void tryChangePosition(int newPositionX, int newPositionY) {
-        System.out.println("can move:"+canMove);
         if(canMove) {
             if (occupiedCells[newPositionX][newPositionY] == 0) {
                 occupiedCells[this.x][this.y] = 0;
