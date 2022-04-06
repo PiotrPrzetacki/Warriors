@@ -15,7 +15,7 @@ public abstract class CharacterClass implements BaseClass {
     private int manaPoints;
     private int level;
     private AttackType attackType;
-    private int attackAmount;
+    protected int attackAmount;
     private String name;
     private int maxHealthPoints;
     private int maxManaPoints;
@@ -308,7 +308,7 @@ public abstract class CharacterClass implements BaseClass {
 
     }
 
-    protected void reduceHealth(int amount) {
+    public void reduceHealth(int amount) {
         setHealthPoints(this.getHealthPoints() - amount);
     }
 
