@@ -74,8 +74,8 @@ public class PlayerSelectionStackPanel extends StackPanel {
     private Map<String, String> getClassData(String characterClassName){
         Map<String, String> data = new HashMap<>();
         data.put("className", characterClassName);
-        if(characterClassName=="Warrior") data.put("imageURL", "assets/images/WarriorResizedBaseImage.png");
-        else if (characterClassName=="Archer") data.put("imageURL", "assets/images/ArcherResizedBaseImage.png");
+        if(characterClassName=="Warrior") data.put("imageURL", "assets/images/characters/WarriorResizedBaseImage.png");
+        else if (characterClassName=="Archer") data.put("imageURL", "assets/images/characters/ArcherResizedBaseImage.png");
 
         return data;
     }

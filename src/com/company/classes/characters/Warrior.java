@@ -18,7 +18,7 @@ public class Warrior extends CharacterClass {
         this.setName(name);
         this.setX(0);
         this.setY(0);
-        this.uploadImage("assets/images/WarriorBaseImage.png", "assets/images/WarriorAttackLeftImage.png", "assets/images/WarriorAttackRightImage.png");
+        this.uploadImage("assets/images/characters/WarriorBaseImage.png", "assets/images/characters/WarriorAttackLeftImage.png", "assets/images/characters/WarriorAttackRightImage.png");
     }
 
     public void left() {
@@ -26,20 +26,17 @@ public class Warrior extends CharacterClass {
        tryChangePosition(newPositionX, this.getY());
     }
     public void right() {
-        int newPositionX = this.getX() < 320 ?  this.getX() + Constants.CHARACTER_WIDTH : 320;
+        int newPositionX = this.getX() < (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH) ?  this.getX() + Constants.CHARACTER_WIDTH : (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH);
         tryChangePosition(newPositionX, this.getY());
     }
     public void up() {
         int newPositionY = this.getY() >= Constants.CHARACTER_HEIGHT ?  this.getY() - Constants.CHARACTER_HEIGHT : 0;
-        System.out.println(newPositionY);
         tryChangePosition(this.getX(), newPositionY);
     }
     public void down() {
-        System.out.println("before button" + getY());
-        int newPositionY = this.getY() < 320 ?  this.getY() + Constants.CHARACTER_HEIGHT : 320;
+        int newPositionY = this.getY()+Constants.CHARACTER_HEIGHT+40 < (Constants.WINDOW_HEIGHT) ?  this.getY() + Constants.CHARACTER_HEIGHT : (Constants.WINDOW_HEIGHT-Constants.CHARACTER_HEIGHT-40);
 
         tryChangePosition(this.getX(), newPositionY);
-        System.out.println("after button" + newPositionY);
     }
 
 }

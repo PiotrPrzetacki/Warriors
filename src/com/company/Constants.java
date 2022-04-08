@@ -10,8 +10,8 @@ import java.util.List;
 public class Constants {
     public static final int CHARACTER_WIDTH = 40;
     public static final int CHARACTER_HEIGHT = 80;
-    public static final int WINDOW_WIDTH = 375;
-    public static final int WINDOW_HEIGHT = 438;
+    public static final int WINDOW_WIDTH = 800;
+    public static final int WINDOW_HEIGHT = 600;
     public static final String defaultFontFamily = "firacode nf";
     public static final Font titleFont = new Font(defaultFontFamily, Font.BOLD, 64);
     public static final Font header1Font = new Font(defaultFontFamily, Font.BOLD, 32);

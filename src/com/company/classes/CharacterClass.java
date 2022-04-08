@@ -1,10 +1,12 @@
 package com.company.classes;
 
+import com.company.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 
 public abstract class CharacterClass implements BaseClass {
-    public static int[][] occupiedCells = new int[321][321];
+    public static int[][] occupiedCells = new int[Constants.WINDOW_WIDTH][Constants.WINDOW_HEIGHT];
     public static int playerCount = 0;
     private int number;
     private int healthPoints = 200;
@@ -35,6 +37,17 @@ public abstract class CharacterClass implements BaseClass {
 
     public CharacterClass(String name){
         this.name = name;
+    }
+
+    public void setCharacterData(int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey){
+        this.x = x;
+        this.y = y;
+        this.leftKey = leftKey;
+        this.rightKey = rightKey;
+        this.upKey = upKey;
+        this.downKey = downKey;
+        this.leftAttackKey = leftAttackKey;
+        this.rightAttackKey = rightAttackKey;
     }
 
     public void setHealthPoints(int healthPoints) {
@@ -122,7 +135,6 @@ public abstract class CharacterClass implements BaseClass {
 
     public void attack(CharacterClass attackedPlayer) {
         attackedPlayer.reduceHealth(this.attackAmount);
-        System.out.println(this.className + " attacked " + attackedPlayer.className + " for " + this.attackAmount);
     }
 
     @Override

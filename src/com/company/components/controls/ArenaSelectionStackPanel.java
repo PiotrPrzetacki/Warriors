@@ -21,18 +21,12 @@ public class ArenaSelectionStackPanel extends StackPanel{
         this.availableArenas = availableArenas;
         this.arenaNameLabel = new HeaderLabel(availableArenas.get(currentIndex).getArenaName(), new Font(Constants.defaultFontFamily, Font.BOLD, 20));
 
-        try {
-            Image arenaImg = ImageIO.read(new File("C:\\Users\\Piotrek\\Desktop\\ArenaExampleImage.png"));
-            arenaImg.getScaledInstance(352, 264, Image.SCALE_SMOOTH);
-            setImageBorder(arenaImg);
-            ImageIcon arenaImage = new ImageIcon(arenaImg);
-            arenaNameLabel.setIcon(arenaImage);
-            arenaNameLabel.setVerticalTextPosition(JLabel.TOP);
-            arenaNameLabel.setHorizontalTextPosition(JLabel.CENTER);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Image arenaImg = availableArenas.get(currentIndex).getArenaImage();
+        arenaImg = arenaImg.getScaledInstance(365, 264, Image.SCALE_SMOOTH);
+        ImageIcon arenaImage = new ImageIcon(arenaImg);
+        arenaNameLabel.setIcon(arenaImage);
+        arenaNameLabel.setVerticalTextPosition(JLabel.TOP);
+        arenaNameLabel.setHorizontalTextPosition(JLabel.CENTER);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(prevBtn);
@@ -44,6 +38,12 @@ public class ArenaSelectionStackPanel extends StackPanel{
 
     @Override
     protected void refresh() {
+        Image arenaImg = availableArenas.get(currentIndex).getArenaImage();
+        arenaImg = arenaImg.getScaledInstance(365, 264, Image.SCALE_SMOOTH);
+        ImageIcon arenaImage = new ImageIcon(arenaImg);
+        arenaNameLabel.setIcon(arenaImage);
+        arenaNameLabel.setVerticalTextPosition(JLabel.TOP);
+        arenaNameLabel.setHorizontalTextPosition(JLabel.CENTER);
         this.arenaNameLabel.setText(availableArenas.get(currentIndex).getArenaName());
         SwingUtilities.updateComponentTreeUI(this);
     }

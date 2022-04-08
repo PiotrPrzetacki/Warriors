@@ -9,6 +9,7 @@ import com.company.components.layouts.MainMenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,16 @@ public class GameSettings extends JPanel {
         SwingUtilities.updateComponentTreeUI(this);
     }
 
+    public void setPlayers(List<CharacterClass> players){
+        if(players.size()==0) return;
+        if(players.size()==1 || players.size()==2){
+            players.get(0).setCharacterData(0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+        }
+        if(players.size()==2){
+            players.get(1).setCharacterData(320, 0, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_O, KeyEvent.VK_P);
+        }
+    }
+
     public void setGameMode(int gameMode) {
         this.gameMode = gameMode;
     }
@@ -70,8 +81,16 @@ public class GameSettings extends JPanel {
         this.arena = arena;
     }
 
+    public Arena getArena() {
+        return arena;
+    }
+
     public int getGameMode() {
         return gameMode;
+    }
+
+    public MainWindow getMainWindow() {
+        return mainWindow;
     }
 
     public List<CharacterClass> getPlayers() {

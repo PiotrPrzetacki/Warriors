@@ -1,7 +1,10 @@
 package com.company.components.layouts;
 
 import com.company.Constants;
+import com.company.Team;
 import com.company.classes.arenas.*;
+import com.company.classes.characters.Archer;
+import com.company.classes.characters.Warrior;
 import com.company.components.GameSettings;
 import com.company.components.controls.ArenaSelectionStackPanel;
 import com.company.components.controls.HeaderLabel;
@@ -10,6 +13,7 @@ import com.company.components.controls.SecondaryButton;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class ArenaSelectionPanel extends JPanel {
@@ -53,6 +57,13 @@ public class ArenaSelectionPanel extends JPanel {
     }
 
     private void handlePlay(ActionEvent e){
+        gameSettingsPanel.setPlayers(gameSettingsPanel.getPlayers());
+        Team team = new Team(gameSettingsPanel.getPlayers());
         gameSettingsPanel.setArena(arenaSelectionStackPanel.getSelectedArena());
+        gameSettingsPanel.getMainWindow().startGame(
+                gameSettingsPanel.getGameMode(),
+                team,
+                gameSettingsPanel.getArena()
+        );
     }
 }

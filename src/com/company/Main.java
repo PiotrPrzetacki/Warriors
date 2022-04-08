@@ -3,7 +3,7 @@ package com.company;
 public class Main {
 
     public static void main(String[] args) {
-        MainWindow mainWindow = new MainWindow(800, 600);
+        MainWindow mainWindow = new MainWindow(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
     }
 }
 //    Team team = new Team (
