@@ -28,7 +28,6 @@ public class MainWindow extends JFrame {
         gameSettingsPanel = new GameSettings(this);
         add(gameSettingsPanel);
         setVisible(true);
-        System.out.println("this.getWidth() = " + this.getWidth());
     }
 
     public void startGame(int gameMode, Team team, Arena arena){

@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 
 import java.util.List;
-import java.util.Locale;
 
 public abstract class Arena implements BaseArena{
 

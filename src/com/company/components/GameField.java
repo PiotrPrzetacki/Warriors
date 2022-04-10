@@ -5,6 +5,8 @@ import com.company.MainWindow;
 import com.company.Team;
 import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
+import com.company.components.controls.HealthBar;
+import com.company.components.layouts.PlayersStats;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,17 +18,20 @@ public class GameField extends JPanel {
     private Team team;
     private Arena arena;
     private CharacterClass[] players;
+    private PlayersStats playersStats;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
         this.team = team;
         this.players = team.getTeamMembers();
         this.arena = arena;
+        this.playersStats = new PlayersStats(players);
 
-        //mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+30);
+        mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
         setLayout(new BorderLayout());
         setPlayersPositions();
         setWalls(arena.getWalls());
         setBackground(arena.getBackgroundColor());
+        add(playersStats, BorderLayout.SOUTH);
 
         setFocusable(true);
         addKeyListener(new FieldKeyListener());
@@ -36,10 +41,11 @@ public class GameField extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        playersStats.refresh();
+
         for (CharacterClass player : players) {
             g.drawImage(player.getImage(), player.getX(), player.getY(), this);
-            g.drawString(""+player.getHealthPoints(), player.getX(), player.getY()+12);
-            g.drawString("steps", player.getX(), player.getY() + 26);
+            g.drawString(player.getName(), player.getX(), player.getY()+12);
         }
         for (int i=0; i<CharacterClass.occupiedCells.length; i++){
             for (int j=0; j<CharacterClass.occupiedCells[0].length; j++){
@@ -71,9 +77,7 @@ public class GameField extends JPanel {
                 if (key == player.getLeftAttackKey()) {
                     player.setAttackLeftImage();
 
-                    player.setAttackLeftImage();
-
-                    if (player.getX() > 0 && CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] > 0) {
+                    if (CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] > 0) {
                         player.attack(players[CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()]-1]);
                     }
 
@@ -91,7 +95,7 @@ public class GameField extends JPanel {
                 if (key == player.getRightAttackKey()) {
                     player.setAttackRightImage();
 
-                    if (player.getX() < 300 && CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] > 0) {
+                    if (CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] > 0) {
                         player.attack(players[CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()]-1]);
                     }
 
@@ -106,9 +110,9 @@ public class GameField extends JPanel {
                             }, 200
                     );
                 }
-                if(key == KeyEvent.VK_Y){
-                    System.out.println((players[0].getX()/40) + " " + (players[0].getY())/80);
-                }
+//                if(key == KeyEvent.VK_Y){
+//                    System.out.println((players[0].getX()/40) + " " + (players[0].getY())/80);
+//                }
             }
             repaint();
         }
