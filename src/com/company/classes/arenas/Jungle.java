@@ -34,4 +34,9 @@ public class Jungle extends Arena{
         walls.add(new int[]{15, 5});
         walls.add(new int[]{10, 3});
     }
+
+    @Override
+    public void setArenaEvent() {
+
+    }
 }

@@ -1,6 +1,8 @@
 package com.company.classes;
 
 import com.company.Constants;
+import com.company.classes.arenas.Arena;
+import com.company.components.GameField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +21,8 @@ public abstract class CharacterClass implements BaseClass {
     private int maxManaPoints;
     private int leftKey, rightKey, upKey, downKey, leftAttackKey,rightAttackKey;
     protected String className;
+    private Arena arena;
+    private boolean canMove;
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -33,6 +37,7 @@ public abstract class CharacterClass implements BaseClass {
         this.downKey = downKey;
         this.leftAttackKey = leftAttackKey;
         this.rightAttackKey = rightAttackKey;
+        this.canMove = true;
     }
 
     public CharacterClass(String name){
@@ -78,6 +83,14 @@ public abstract class CharacterClass implements BaseClass {
         } else {
             this.level = level;
         }
+    }
+
+    public void setArena(Arena arena) {
+        this.arena = arena;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
     }
 
     public void setAttackType(AttackType attackType) {
@@ -201,6 +214,10 @@ public abstract class CharacterClass implements BaseClass {
         setBaseImage();
     }
 
+    public boolean getCanMove() {
+        return canMove;
+    }
+
     public void setBaseImage() {
         this.image = this.baseImage;
     }
@@ -239,13 +256,56 @@ public abstract class CharacterClass implements BaseClass {
 
     public void tryChangePosition(int newPositionX, int newPositionY) {
         if (occupiedCells[newPositionX][newPositionY] == 0) {
-            occupiedCells[this.x][this.y] = 0;
-            occupiedCells[newPositionX][newPositionY] = this.number;
-            this.x = newPositionX;
-            this.y = newPositionY;
+            if (arena.getSpecialSquares()[newPositionX][newPositionY] != -3) {
+                occupiedCells[this.x][this.y] = 0;
+                occupiedCells[newPositionX][newPositionY] = this.number;
+                this.x = newPositionX;
+                this.y = newPositionY;
+            } else {
+                occupiedCells[this.x][this.y] = 0;
+                occupiedCells[newPositionX][newPositionY] = this.number;
+                int[] direction = getPlayerDirection(x, y, newPositionX, newPositionY);
+                if (direction[0] == 0) {
+                    this.x = newPositionX;
+                    this.y = newPositionY;
+                    int newX = newPositionX + (Constants.CHARACTER_WIDTH * direction[1]);
+                    canMove = false;
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (newX >= 0 && newX <= CharacterClass.occupiedCells[0].length) {
+                                        tryChangePosition(newX, y);
+                                    }
+                                    canMove = true;
+                                }
+                            }, 200
+                    );
+
+                } else if (direction[0] == 1) {
+                    this.x = newPositionX;
+                    this.y = newPositionY;
+                    int newY = newPositionY + (Constants.CHARACTER_HEIGHT * direction[1]);
+                    canMove = false;
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (newY >= 0 && newY <= CharacterClass.occupiedCells.length) {
+                                        tryChangePosition(x, newY);
+                                    }
+                                    canMove = true;
+                                }
+                            }, 200
+                    );
+
+                }
+            }
+            if (arena.getSpecialSquares()[newPositionX][newPositionY] == -2) reduceHealth(100);
         } else {
             reduceHealth(50);
         }
+
     }
 
     protected void reduceHealth(int amount) {
@@ -266,5 +326,15 @@ public abstract class CharacterClass implements BaseClass {
                 "name='" + name + '\'' +
                 ", className='" + className + '\'' +
                 '}';
+    }
+
+    private int[] getPlayerDirection(int oldX, int oldY, int newX, int newY){
+        if(oldY-newY < 0) return new int[]{1, 1};
+        else if(oldY-newY > 0) return new int[]{1, -1};
+        else {
+            if(oldX-newX < 0) return new int[]{0, 1};
+            else if(oldX-newX > 0) return new int[]{0, -1};
+            else return new int[]{0, 0};
+        }
     }
 }

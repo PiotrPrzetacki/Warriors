@@ -1,13 +1,21 @@
 package com.company.classes.arenas;
 
+import com.company.Constants;
+import com.company.classes.CharacterClass;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Winter extends Arena{
 
+    private int icySquaresCount;
+    private int icySquareNumber;
+
     public Winter() {
         this.arenaName = "Winter";
+        this.icySquaresCount = 8;
+        this.icySquareNumber = -3;
         this.setImages();
         this.backgroundColor = new Color(0x468D9D);
         this.playersSpawnPoints = new ArrayList<>();
@@ -66,5 +74,10 @@ public class Winter extends Arena{
         walls.add(new int[]{7, 5});
         walls.add(new int[]{12, 5});
         walls.add(new int[]{19, 5});
+    }
+
+    @Override
+    public void setArenaEvent() {
+        getRandomSquares(icySquaresCount, icySquareNumber);
     }
 }

@@ -19,17 +19,22 @@ public class GameField extends JPanel {
     private Arena arena;
     private CharacterClass[] players;
     private PlayersStats playersStats;
+    private boolean repaintLoopEnabled;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
         this.team = team;
         this.players = team.getTeamMembers();
         this.arena = arena;
         this.playersStats = new PlayersStats(players);
+        this.repaintLoopEnabled = true;
 
         mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
         setLayout(new BorderLayout());
+        setPlayersArena();
         setPlayersPositions();
+        setRepaintLoop();
         setWalls(arena.getWalls());
+        arena.setArenaEvent();
         setBackground(arena.getBackgroundColor());
         add(playersStats, BorderLayout.SOUTH);
 
@@ -52,6 +57,16 @@ public class GameField extends JPanel {
                 if(CharacterClass.occupiedCells[i][j] == -1){
                     g.drawImage(arena.getWallImage(), i, j, this);
                 }
+                if(arena.getSpecialSquares()[i][j] == -2){
+                    g.drawImage(arena.getFireImage(), i, j, this);
+                }
+                else if(arena.getSpecialSquares()[i][j] == -3){
+                    g.drawImage(arena.getIcySquareImage(), i, j, this);
+                    for (CharacterClass player : players) {
+                        g.drawImage(player.getImage(), player.getX(), player.getY(), this);
+                        g.drawString(player.getName(), player.getX(), player.getY()+12);
+                    }
+                }
             }
         }
     }
@@ -62,17 +77,19 @@ public class GameField extends JPanel {
             super.keyPressed(e);
             int key = e.getKeyCode();
             for (CharacterClass player : players) {
-                if (key == player.getLeftKey()) {
-                    player.left();
-                }
-                if (key == player.getRightKey()) {
-                    player.right();
-                }
-                if (key == player.getUpKey()) {
-                    player.up();
-                }
-                if (key == player.getDownKey()) {
-                    player.down();
+                if(player.getCanMove()) {
+                    if (key == player.getLeftKey()) {
+                        player.left();
+                    }
+                    if (key == player.getRightKey()) {
+                        player.right();
+                    }
+                    if (key == player.getUpKey()) {
+                        player.up();
+                    }
+                    if (key == player.getDownKey()) {
+                        player.down();
+                    }
                 }
                 if (key == player.getLeftAttackKey()) {
                     player.setAttackLeftImage();
@@ -110,9 +127,10 @@ public class GameField extends JPanel {
                             }, 200
                     );
                 }
-//                if(key == KeyEvent.VK_Y){
-//                    System.out.println((players[0].getX()/40) + " " + (players[0].getY())/80);
-//                }
+                if(key == KeyEvent.VK_Y){
+                    arena.setEventEnabled(false);
+                    System.out.println((players[0].getX()/40) + " " + (players[0].getY())/80);
+                }
             }
             repaint();
         }
@@ -127,6 +145,32 @@ public class GameField extends JPanel {
         for(int i=0; i<players.length; i++){
             players[i].tryChangePosition(arena.getPlayersSpawnPoints().get(i)[0]*Constants.CHARACTER_WIDTH,
                                          arena.getPlayersSpawnPoints().get(i)[1]*Constants.CHARACTER_HEIGHT);
+        }
+    }
+
+    private void setPlayersArena(){
+        for(CharacterClass player : players){
+            player.setArena(arena);
+        }
+    }
+
+    private void setRepaintLoop(){
+        if(repaintLoopEnabled) {
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            repaint();
+                            setRepaintLoop();
+                        }
+                    }, 30
+            );
+        }
+    }
+
+    private void setPlayersCanMove(boolean canMove){
+        for(CharacterClass player : players){
+            player.setCanMove(canMove);
         }
     }
 }
