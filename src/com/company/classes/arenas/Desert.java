@@ -8,6 +8,7 @@ public class Desert extends Arena{
 
     public Desert() {
         this.arenaName = "Desert";
+        this.eventEnabled = true;
         this.setImages();
         this.backgroundColor = new Color(0x837D4B);
         this.playersSpawnPoints = new ArrayList<>();

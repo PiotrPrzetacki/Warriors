@@ -108,4 +108,11 @@ public abstract class Arena implements BaseArena{
     public Image getIcySquareImage() {
         return icySquareImage;
     }
+
+    public Arena resetArena(String arenaClassName) {
+        if(arenaClassName.equals("Desert")) return new Desert();
+        else if(arenaClassName.equals("Hell")) return new Hell();
+        else if(arenaClassName.equals("Jungle")) return new Jungle();
+        else return new Winter();
+    }
 }

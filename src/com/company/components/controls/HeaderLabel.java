@@ -18,6 +18,7 @@ public class HeaderLabel extends JLabel {
             default:
             case 2:
                 this.setFont(Constants.header2Font);
+                this.setHorizontalAlignment(JLabel.CENTER);
                 this.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
     }

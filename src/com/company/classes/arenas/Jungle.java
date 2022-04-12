@@ -11,6 +11,7 @@ public class Jungle extends Arena{
 
     public Jungle(){
         this.arenaName = "Jungle";
+        this.eventEnabled = true;
         this.setImages();
         this.backgroundColor = new Color(0x5FAF7B);
         this.playersSpawnPoints = new ArrayList<>();

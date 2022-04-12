@@ -16,6 +16,7 @@ public class Hell extends Arena{
 
     public Hell() {
         this.arenaName = "Hell";
+        this.eventEnabled = true;
         this.setImages();
         this.fireSquaresCount = 7;
         this.fireSquareNumber = -2;

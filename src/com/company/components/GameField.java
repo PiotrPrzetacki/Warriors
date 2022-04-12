@@ -6,6 +6,7 @@ import com.company.Team;
 import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
 import com.company.components.controls.HealthBar;
+import com.company.components.controls.PausePanel;
 import com.company.components.layouts.PlayersStats;
 
 import javax.swing.*;
@@ -19,14 +20,20 @@ public class GameField extends JPanel {
     private Arena arena;
     private CharacterClass[] players;
     private PlayersStats playersStats;
+    private PausePanel pausePanel;
     private boolean repaintLoopEnabled;
+    private boolean pauseState;
+    private MainWindow mainWindow;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
         this.team = team;
         this.players = team.getTeamMembers();
         this.arena = arena;
         this.playersStats = new PlayersStats(players);
+        this.pausePanel = new PausePanel(mainWindow);
         this.repaintLoopEnabled = true;
+        this.pauseState = true;
+        this.mainWindow = mainWindow;
 
         mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
         setLayout(new BorderLayout());
@@ -91,46 +98,52 @@ public class GameField extends JPanel {
                         player.down();
                     }
                 }
-                if (key == player.getLeftAttackKey()) {
-                    player.setAttackLeftImage();
+                if(player.getCanAttack()) {
+                    if (key == player.getLeftAttackKey()) {
+                        player.setAttackLeftImage();
 
-                    if (CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] > 0) {
-                        player.attack(players[CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()]-1]);
+                        if (CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] > 0) {
+                            player.attack(players[CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] - 1]);
+                        }
+
+                        //timer
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        player.setBaseImage();
+                                        repaint();
+                                    }
+                                }, 200
+                        );
                     }
+                    if (key == player.getRightAttackKey()) {
+                        player.setAttackRightImage();
 
-                    //timer
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                player.setBaseImage();
-                                repaint();
-                                }
-                            }, 200
-                    );
-                }
-                if (key == player.getRightAttackKey()) {
-                    player.setAttackRightImage();
+                        if (CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] > 0) {
+                            player.attack(players[CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] - 1]);
+                        }
 
-                    if (CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] > 0) {
-                        player.attack(players[CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()]-1]);
+                        //timer
+                        new java.util.Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        player.setBaseImage();
+                                        repaint();
+                                    }
+                                }, 200
+                        );
                     }
-
-                    //timer
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                player.setBaseImage();
-                                repaint();
-                                }
-                            }, 200
-                    );
                 }
-                if(key == KeyEvent.VK_Y){
-                    arena.setEventEnabled(false);
-                    System.out.println((players[0].getX()/40) + " " + (players[0].getY())/80);
-                }
+            }
+            if(key == KeyEvent.VK_Y){
+                arena.setEventEnabled(false);
+                System.out.println((players[0].getX()/40) + " " + (players[0].getY())/80);
+            }
+            else if(key == KeyEvent.VK_ESCAPE){
+                pauseState = !pauseState;
+                pauseGame(pauseState);
             }
             repaint();
         }
@@ -144,7 +157,8 @@ public class GameField extends JPanel {
     private void setPlayersPositions(){
         for(int i=0; i<players.length; i++){
             players[i].tryChangePosition(arena.getPlayersSpawnPoints().get(i)[0]*Constants.CHARACTER_WIDTH,
-                                         arena.getPlayersSpawnPoints().get(i)[1]*Constants.CHARACTER_HEIGHT);
+                                         arena.getPlayersSpawnPoints().get(i)[1]*Constants.CHARACTER_HEIGHT,
+                                         false);
         }
     }
 
@@ -172,5 +186,50 @@ public class GameField extends JPanel {
         for(CharacterClass player : players){
             player.setCanMove(canMove);
         }
+    }
+
+    private void setPlayersCanAttack(boolean canAttack){
+        for(CharacterClass player : players){
+            player.setCanAttack(canAttack);
+        }
+    }
+
+    private void pauseGame(boolean pauseState){
+        pausePanel.refresh();
+        if(pauseState) {
+            setPlayersCanMove(true);
+            setPlayersCanAttack(true);
+            remove(pausePanel);
+        }
+        else {
+            setPlayersCanMove(false);
+            setPlayersCanAttack(false);
+            add(pausePanel, BorderLayout.CENTER);
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    public void resetGameField(){
+        removeAll();
+        this.playersStats = new PlayersStats(players);
+        this.pausePanel = new PausePanel(mainWindow);
+        this.repaintLoopEnabled = true;
+        this.pauseState = true;
+
+        mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
+        setLayout(new BorderLayout());
+        setPlayersArena();
+        setPlayersPositions();
+        setRepaintLoop();
+        setWalls(arena.getWalls());
+        arena.resetArena(arena.getArenaName());
+        arena.setArenaEvent();
+        setBackground(arena.getBackgroundColor());
+        add(playersStats, BorderLayout.SOUTH);
+        for(CharacterClass player : players){
+            player.setHealthPoints(player.getMaxHealthPoints());
+        }
+
+        setFocusable(true);
     }
 }

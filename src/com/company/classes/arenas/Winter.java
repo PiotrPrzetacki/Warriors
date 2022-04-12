@@ -14,6 +14,7 @@ public class Winter extends Arena{
 
     public Winter() {
         this.arenaName = "Winter";
+        this.eventEnabled = true;
         this.icySquaresCount = 8;
         this.icySquareNumber = -3;
         this.setImages();

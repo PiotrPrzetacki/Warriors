@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ArenaSelectionPanel extends JPanel {
@@ -29,7 +31,12 @@ public class ArenaSelectionPanel extends JPanel {
 
         this.gameSettingsPanel = gameSettingsPanel;
 
-        availableArenas = Constants.availableArenas;
+        availableArenas = new ArrayList<>(Arrays.asList(
+                new Jungle(),
+                new Desert(),
+                new Hell(),
+                new Winter()
+        ));
 
         title = new HeaderLabel("Select arena", 1);
         title.setBorder(BorderFactory.createEmptyBorder(20, 40, 0, 40));

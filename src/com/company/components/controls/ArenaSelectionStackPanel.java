@@ -48,18 +48,6 @@ public class ArenaSelectionStackPanel extends StackPanel{
         SwingUtilities.updateComponentTreeUI(this);
     }
 
-    private void setImageBorder(Image img){
-        Graphics2D g = (Graphics2D) img.getGraphics();
-        g.setStroke(new BasicStroke(10));
-        g.setColor(Color.BLACK);
-        g.drawRect(0, 0, img.getWidth(null), img.getHeight(null));
-        try {
-            ImageIO.createImageOutputStream(img);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public Arena getSelectedArena(){
         return availableArenas.get(currentIndex);
     }

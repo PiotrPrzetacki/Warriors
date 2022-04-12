@@ -23,6 +23,7 @@ public abstract class CharacterClass implements BaseClass {
     protected String className;
     private Arena arena;
     private boolean canMove;
+    private boolean canAttack;
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -38,6 +39,7 @@ public abstract class CharacterClass implements BaseClass {
         this.leftAttackKey = leftAttackKey;
         this.rightAttackKey = rightAttackKey;
         this.canMove = true;
+        this.canAttack = true;
     }
 
     public CharacterClass(String name){
@@ -117,8 +119,8 @@ public abstract class CharacterClass implements BaseClass {
         return healthPoints;
     }
 
-    public int getManaPoints() {
-        return manaPoints;
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
     }
 
     public int getLevel() {
@@ -148,6 +150,10 @@ public abstract class CharacterClass implements BaseClass {
 
     public void attack(CharacterClass attackedPlayer) {
         attackedPlayer.reduceHealth(this.attackAmount);
+    }
+
+    public boolean getCanAttack() {
+        return canAttack;
     }
 
     @Override
@@ -302,7 +308,61 @@ public abstract class CharacterClass implements BaseClass {
                 }
             }
             if (arena.getSpecialSquares()[newPositionX][newPositionY] == -2) reduceHealth(100);
-        } else {
+        } else{
+            reduceHealth(50);
+        }
+
+    }
+
+    public void tryChangePosition(int newPositionX, int newPositionY, boolean takeDamage) {
+        if (occupiedCells[newPositionX][newPositionY] == 0) {
+            if (arena.getSpecialSquares()[newPositionX][newPositionY] != -3) {
+                occupiedCells[this.x][this.y] = 0;
+                occupiedCells[newPositionX][newPositionY] = this.number;
+                this.x = newPositionX;
+                this.y = newPositionY;
+            } else {
+                occupiedCells[this.x][this.y] = 0;
+                occupiedCells[newPositionX][newPositionY] = this.number;
+                int[] direction = getPlayerDirection(x, y, newPositionX, newPositionY);
+                if (direction[0] == 0) {
+                    this.x = newPositionX;
+                    this.y = newPositionY;
+                    int newX = newPositionX + (Constants.CHARACTER_WIDTH * direction[1]);
+                    canMove = false;
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (newX >= 0 && newX <= CharacterClass.occupiedCells[0].length) {
+                                        tryChangePosition(newX, y);
+                                    }
+                                    canMove = true;
+                                }
+                            }, 200
+                    );
+
+                } else if (direction[0] == 1) {
+                    this.x = newPositionX;
+                    this.y = newPositionY;
+                    int newY = newPositionY + (Constants.CHARACTER_HEIGHT * direction[1]);
+                    canMove = false;
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (newY >= 0 && newY <= CharacterClass.occupiedCells.length) {
+                                        tryChangePosition(x, newY);
+                                    }
+                                    canMove = true;
+                                }
+                            }, 200
+                    );
+
+                }
+            }
+            if (arena.getSpecialSquares()[newPositionX][newPositionY] == -2) reduceHealth(100);
+        } else if(takeDamage){
             reduceHealth(50);
         }
 
@@ -319,6 +379,10 @@ public abstract class CharacterClass implements BaseClass {
     public abstract void up();
 
     public abstract void down();
+
+    public static void resetOccupiedCells(){
+        CharacterClass.occupiedCells = new int[Constants.WINDOW_WIDTH][Constants.WINDOW_HEIGHT];
+    }
 
     @Override
     public String toString() {
