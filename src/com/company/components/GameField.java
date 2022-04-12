@@ -7,6 +7,7 @@ import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
 import com.company.components.controls.HealthBar;
 import com.company.components.controls.PausePanel;
+import com.company.components.controls.StartGameMenu;
 import com.company.components.layouts.PlayersStats;
 
 import javax.swing.*;
@@ -44,6 +45,8 @@ public class GameField extends JPanel {
         arena.setArenaEvent();
         setBackground(arena.getBackgroundColor());
         add(playersStats, BorderLayout.SOUTH);
+
+        add(new StartGameMenu(this), BorderLayout.CENTER);
 
         setFocusable(true);
         addKeyListener(new FieldKeyListener());
@@ -182,13 +185,13 @@ public class GameField extends JPanel {
         }
     }
 
-    private void setPlayersCanMove(boolean canMove){
+    public void setPlayersCanMove(boolean canMove){
         for(CharacterClass player : players){
             player.setCanMove(canMove);
         }
     }
 
-    private void setPlayersCanAttack(boolean canAttack){
+    public void setPlayersCanAttack(boolean canAttack){
         for(CharacterClass player : players){
             player.setCanAttack(canAttack);
         }
@@ -207,29 +210,5 @@ public class GameField extends JPanel {
             add(pausePanel, BorderLayout.CENTER);
         }
         SwingUtilities.updateComponentTreeUI(this);
-    }
-
-    public void resetGameField(){
-        removeAll();
-        this.playersStats = new PlayersStats(players);
-        this.pausePanel = new PausePanel(mainWindow);
-        this.repaintLoopEnabled = true;
-        this.pauseState = true;
-
-        mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
-        setLayout(new BorderLayout());
-        setPlayersArena();
-        setPlayersPositions();
-        setRepaintLoop();
-        setWalls(arena.getWalls());
-        arena.resetArena(arena.getArenaName());
-        arena.setArenaEvent();
-        setBackground(arena.getBackgroundColor());
-        add(playersStats, BorderLayout.SOUTH);
-        for(CharacterClass player : players){
-            player.setHealthPoints(player.getMaxHealthPoints());
-        }
-
-        setFocusable(true);
     }
 }
