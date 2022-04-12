@@ -10,26 +10,28 @@ import java.awt.event.ActionEvent;
 
 public class PauseMenu extends JPanel {
 
+    private JLabel titleLabel;
     private JPanel buttonsPanel;
     private JButton homeButton;
     private JButton restartButton;
     private JButton quitButton;
     private MainWindow mainWindow;
 
-    public PauseMenu(MainWindow mainWindow){
+    public PauseMenu(MainWindow mainWindow, String text){
         this.mainWindow = mainWindow;
         setMaximumSize(new Dimension(400, 300));
         setPreferredSize(new Dimension(400, 300));
+        setMinimumSize(new Dimension(400, 300));
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
-        HeaderLabel title = new HeaderLabel("Game Paused", 2);
-        title.setFont(new Font(Constants.defaultFontFamily, Font.BOLD, 40));
-        add(title, BorderLayout.NORTH);
+        this.titleLabel = new HeaderLabel(text, 2);
+        titleLabel.setFont(new Font(Constants.defaultFontFamily, Font.BOLD, 34));
+        add(titleLabel, BorderLayout.NORTH);
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
-        homeButton = new MenuButton("Go to main menu", new ImageIcon("C:\\Users\\Piotrek\\Desktop\\back.png"), this);
-        restartButton = new MenuButton("Restart Game", new ImageIcon("C:\\Users\\Piotrek\\Desktop\\restart.png"), this);
-        quitButton = new MenuButton("Quit", new ImageIcon("C:\\Users\\Piotrek\\Desktop\\exit.png"), this);
+        homeButton = new MenuButton("Go to main menu", new ImageIcon("assets/icons/home_icon.png"), this);
+        restartButton = new MenuButton("Restart Game", new ImageIcon("assets/icons/restart_icon.png"), this);
+        quitButton = new MenuButton("Quit", new ImageIcon("assets/icons/quit_icon.png"), this);
         homeButton.addActionListener(this::handleGoToMainMenu);
         restartButton.addActionListener(this::handleRestartGame);
         quitButton.addActionListener(this::handleQuit);
@@ -58,25 +60,11 @@ public class PauseMenu extends JPanel {
     }
 
     public void refresh(){
-        removeAll();
-        HeaderLabel title = new HeaderLabel("Game Paused", 2);
-        title.setFont(new Font(Constants.defaultFontFamily, Font.BOLD, 40));
-        add(title, BorderLayout.NORTH);
-        buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
-        homeButton = new MenuButton("Go to main menu", new ImageIcon("C:\\Users\\Piotrek\\Desktop\\back.png"), this);
-        restartButton = new MenuButton("Restart Game", new ImageIcon("C:\\Users\\Piotrek\\Desktop\\restart.png"), this);
-        quitButton = new MenuButton("Quit", new ImageIcon("C:\\Users\\Piotrek\\Desktop\\exit.png"), this);
-        homeButton.addActionListener(this::handleGoToMainMenu);
-        restartButton.addActionListener(this::handleRestartGame);
-        quitButton.addActionListener(this::handleQuit);
-        buttonsPanel.add(Box.createHorizontalGlue());
-        buttonsPanel.add(homeButton);
-        buttonsPanel.add(Box.createHorizontalGlue());
-        buttonsPanel.add(restartButton);
-        buttonsPanel.add(Box.createHorizontalGlue());
-        buttonsPanel.add(quitButton);
-        buttonsPanel.add(Box.createHorizontalGlue());
-        add(buttonsPanel, BorderLayout.SOUTH);
+        revalidate();
+        repaint();
+    }
+
+    public void setTitleText(String text){
+        titleLabel.setText(text);
     }
 }

@@ -55,6 +55,7 @@ public class MainWindow extends JFrame {
 
         }
         CharacterClass.resetOccupiedCells();
+        CharacterClass.setPlayerCount(CharacterClass.getPlayerCount()-2);
         gameSettingsPanel = new GameSettings(this);
         add(gameSettingsPanel);
         revalidate();

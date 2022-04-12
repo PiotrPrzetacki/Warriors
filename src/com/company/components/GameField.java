@@ -31,7 +31,7 @@ public class GameField extends JPanel {
         this.players = team.getTeamMembers();
         this.arena = arena;
         this.playersStats = new PlayersStats(players);
-        this.pausePanel = new PausePanel(mainWindow);
+        this.pausePanel = new PausePanel(mainWindow, "Game paused");
         this.repaintLoopEnabled = true;
         this.pauseState = true;
         this.mainWindow = mainWindow;
@@ -57,6 +57,8 @@ public class GameField extends JPanel {
         super.paintComponent(g);
 
         playersStats.refresh();
+
+        if(pauseState) checkGameOver();
 
         for (CharacterClass player : players) {
             g.drawImage(player.getImage(), player.getX(), player.getY(), this);
@@ -210,5 +212,19 @@ public class GameField extends JPanel {
             add(pausePanel, BorderLayout.CENTER);
         }
         SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    private void checkGameOver(){
+        for(CharacterClass player : players){
+            if(player.getHealthPoints()<=0){
+                for(CharacterClass winningPlayer : players){
+                    if(winningPlayer.getHealthPoints()>0){
+                        pausePanel.setPauseText(winningPlayer.getName() + " wins!");
+                        pauseGame(false);
+                    }
+                }
+                break;
+            }
+        }
     }
 }

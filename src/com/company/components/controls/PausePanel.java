@@ -9,8 +9,8 @@ public class PausePanel extends JPanel {
 
     private PauseMenu pauseMenu;
 
-    public PausePanel(MainWindow mainWindow){
-        this.pauseMenu = new PauseMenu(mainWindow);
+    public PausePanel(MainWindow mainWindow, String text){
+        this.pauseMenu = new PauseMenu(mainWindow, text);
         setBackground(new Color(0, 0, 0, 190));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createHorizontalGlue());
@@ -20,5 +20,9 @@ public class PausePanel extends JPanel {
 
     public void refresh(){
         pauseMenu.refresh();
+    }
+
+    public void setPauseText(String text){
+        pauseMenu.setTitleText(text);
     }
 }

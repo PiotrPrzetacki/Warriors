@@ -236,6 +236,14 @@ public abstract class CharacterClass implements BaseClass {
         this.image = this.attackRightImage;
     }
 
+    public static int getPlayerCount() {
+        return playerCount;
+    }
+
+    public static void setPlayerCount(int playerCount) {
+        CharacterClass.playerCount = playerCount;
+    }
+
     public int getLeftKey() {
         return leftKey;
     }
