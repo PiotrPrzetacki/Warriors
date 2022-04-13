@@ -12,7 +12,7 @@ public class Constants {
     public static final int CHARACTER_HEIGHT = 80;
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
-    public static final String defaultFontFamily = "firacode nf";
+    public static final String defaultFontFamily = "consolas";
     public static final Font titleFont = new Font(defaultFontFamily, Font.BOLD, 64);
     public static final Font header1Font = new Font(defaultFontFamily, Font.BOLD, 32);
     public static final Font header2Font = new Font(defaultFontFamily, Font.BOLD, 26);

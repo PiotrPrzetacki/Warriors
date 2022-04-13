@@ -13,6 +13,7 @@ public class Warrior extends CharacterClass {
         this.className = "Warior";
         this.setLevel(1);
         this.setManaPoints(200);
+        this.setAttackDistance(1);
         this.setMaxManaPoints(200);
         this.setAttackType(AttackType.PHYSICAL);
         this.setName(name);

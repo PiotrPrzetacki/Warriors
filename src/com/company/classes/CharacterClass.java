@@ -24,6 +24,7 @@ public abstract class CharacterClass implements BaseClass {
     private Arena arena;
     private boolean canMove;
     private boolean canAttack;
+    private int attackDistance;
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -148,8 +149,23 @@ public abstract class CharacterClass implements BaseClass {
     }
 
 
-    public void attack(CharacterClass attackedPlayer) {
-        attackedPlayer.reduceHealth(this.attackAmount);
+    public void attack(int direction, CharacterClass[] players) {
+        if(direction==0){
+            for(int i=0; i<attackDistance; i++){
+                if(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
+                    players[CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1].reduceHealth(this.attackAmount);
+                    break;
+                }
+            }
+        }
+        else if(direction==1){
+            for(int i=0; i<attackDistance; i++){
+                if(CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
+                    players[CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1].reduceHealth(this.attackAmount);
+                    break;
+                }
+            }
+        }
     }
 
     public boolean getCanAttack() {
@@ -387,6 +403,14 @@ public abstract class CharacterClass implements BaseClass {
     public abstract void up();
 
     public abstract void down();
+
+    public int getAttackDistance() {
+        return attackDistance;
+    }
+
+    public void setAttackDistance(int attackDistance) {
+        this.attackDistance = attackDistance;
+    }
 
     public static void resetOccupiedCells(){
         CharacterClass.occupiedCells = new int[Constants.WINDOW_WIDTH][Constants.WINDOW_HEIGHT];

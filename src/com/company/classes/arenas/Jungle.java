@@ -25,6 +25,7 @@ public class Jungle extends Arena{
         walls.add(new int[]{15, 1});
         walls.add(new int[]{16, 1});
         walls.add(new int[]{17, 1});
+        walls.add(new int[]{17, 2});
         walls.add(new int[]{2, 4});
         walls.add(new int[]{2, 5});
         walls.add(new int[]{3, 5});

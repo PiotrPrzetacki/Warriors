@@ -107,9 +107,7 @@ public class GameField extends JPanel {
                     if (key == player.getLeftAttackKey()) {
                         player.setAttackLeftImage();
 
-                        if (CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] > 0) {
-                            player.attack(players[CharacterClass.occupiedCells[player.getX() - Constants.CHARACTER_WIDTH][player.getY()] - 1]);
-                        }
+                        player.attack(1, players);
 
                         //timer
                         new java.util.Timer().schedule(
@@ -125,9 +123,7 @@ public class GameField extends JPanel {
                     if (key == player.getRightAttackKey()) {
                         player.setAttackRightImage();
 
-                        if (CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] > 0) {
-                            player.attack(players[CharacterClass.occupiedCells[player.getX() + Constants.CHARACTER_WIDTH][player.getY()] - 1]);
-                        }
+                        player.attack(0, players);
 
                         //timer
                         new java.util.Timer().schedule(

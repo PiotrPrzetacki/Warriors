@@ -1,7 +1,7 @@
 package com.company.classes;
 
 public interface BaseClass {
-    void attack(CharacterClass player);
+    void attack(int direction, CharacterClass[] players);
     void restoreHealth(int amount);
     void loseHealth(int amount);
     void restoreMana(int amount);
