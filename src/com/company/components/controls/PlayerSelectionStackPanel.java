@@ -2,6 +2,7 @@ package com.company.components.controls;
 
 import com.company.classes.CharacterClass;
 import com.company.classes.characters.Archer;
+import com.company.classes.characters.Mage;
 import com.company.classes.characters.Warrior;
 
 import javax.swing.*;
@@ -76,6 +77,7 @@ public class PlayerSelectionStackPanel extends StackPanel {
         data.put("className", characterClassName);
         if(characterClassName=="Warrior") data.put("imageURL", "assets/images/characters/WarriorResizedBaseImage.png");
         else if (characterClassName=="Archer") data.put("imageURL", "assets/images/characters/ArcherResizedBaseImage.png");
+        else if (characterClassName=="Mage") data.put("imageURL", "assets/images/characters/MageResizedBase.png");
 
         return data;
     }
@@ -100,7 +102,8 @@ public class PlayerSelectionStackPanel extends StackPanel {
                 return new Warrior(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
             case "Archer":
                 return new Archer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-
+            case "Mage":
+                return new Mage(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
         }
     }
 }
