@@ -11,14 +11,9 @@ public class Warrior extends CharacterClass {
         this.setMaxHealthPoints(1000);
         this.setHealthPoints(1000);
         this.className = "Warior";
-        this.setLevel(1);
-        this.setManaPoints(200);
         this.setAttackDistance(1);
-        this.setMaxManaPoints(200);
         this.setAttackType(AttackType.PHYSICAL);
         this.setName(name);
-        this.setX(0);
-        this.setY(0);
         this.uploadImage("/images/characters/WarriorBaseImage.png",
                 "/images/characters/WarriorAttackLeftImage.png",
                 "/images/characters/WarriorAttackRightImage.png");

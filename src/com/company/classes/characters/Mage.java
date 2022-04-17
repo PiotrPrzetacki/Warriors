@@ -16,18 +16,6 @@ public class Mage  extends CharacterClass {
         this.uploadImage("/images/characters/MageBase.png",
                 "/images/characters/MageAttackLeft.png",
                 "/images/characters/MageAttackRight.png");
-        /*this.setLevel(1);
-        this.setMaxHealthPoints(1000);
-        this.setHealthPoints(1000);
-        this.setManaPoints(200);
-        this.setMaxManaPoints(200);
-        this.setAttackType(AttackType.PHYSICAL);
-        this.setAttackAmount(5);
-        this.setName(name);
-
-        this.setX(300);
-        this.setY(0);
-        this.uploadImage("WarriorBaseImage.png", "WarriorAttackRightImage.png", "WarriorAttackLeftImage.png");*/
     }
     public void left() {
         int newPositionX = this.getX() > Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : 0;

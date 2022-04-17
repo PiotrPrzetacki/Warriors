@@ -1,7 +1,6 @@
 package com.company.classes.characters;
 
 import com.company.Constants;
-import com.company.classes.AttackType;
 import com.company.classes.CharacterClass;
 
 public class Archer  extends CharacterClass {
@@ -12,17 +11,6 @@ public class Archer  extends CharacterClass {
         setHealthPoints(500);
         this.className = "Archer";
         this.setAttackDistance(2);
-        /*this.setLevel(1);
-        this.setMaxHealthPoints(1000);
-        this.setHealthPoints(1000);
-        this.setManaPoints(200);
-        this.setMaxManaPoints(200);
-        this.setAttackType(AttackType.PHYSICAL);
-        this.setAttackAmount(5);
-        this.setName(name);*/
-
-        /*this.setX(300);
-        this.setY(300);*/
         this.uploadImage("/images/characters/ArcherBaseImage.png",
                 "/images/characters/ArcherAttackLeftImage.png",
                 "/images/characters/ArcherAttackRightImage.png");
