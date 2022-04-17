@@ -1,11 +1,6 @@
 package com.company;
 
-import com.company.classes.arenas.*;
-
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Constants {
     public static final int CHARACTER_WIDTH = 40;

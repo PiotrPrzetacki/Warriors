@@ -14,8 +14,8 @@ import java.util.List;
 public class PlayerSelectionStackPanel extends StackPanel {
 
     private ImageIcon classImage;
-    private JLabel classNameLabel;
-    private JLabel imageLabel;
+    private final JLabel classNameLabel;
+    private final JLabel imageLabel;
     private Map<String, String> playerData;
 
     private JTextField playerNameTextField;
@@ -78,7 +78,7 @@ public class PlayerSelectionStackPanel extends StackPanel {
         switch (characterClassName) {
             case "Warrior" -> data.put("imageURL", "/images/characters/WarriorResizedBaseImage.png");
             case "Archer" -> data.put("imageURL", "/images/characters/ArcherResizedBaseImage.png");
-            case "Mage" -> data.put("imageURL", "/images/characters/MageResizedBase.png");
+            case "Mage" -> data.put("imageURL", "/images/characters/MageResizedBaseImage.png");
         }
 
         return data;

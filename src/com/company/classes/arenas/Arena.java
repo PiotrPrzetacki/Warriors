@@ -9,7 +9,7 @@ import java.awt.*;
 
 import java.util.List;
 
-public abstract class Arena implements BaseArena{
+public abstract class Arena{
 
     protected String arenaName;
     protected Image arenaImage;
@@ -20,14 +20,10 @@ public abstract class Arena implements BaseArena{
     protected boolean eventEnabled;
     protected int[][] specialSquares;
 
-    private Image fireImage;
-    private Image icySquareImage;
-
-    private boolean isOpened = false;
+    private static final Image fireImage = new ImageIcon(Arena.class.getResource("/images/arenas/hell_fire.gif")).getImage();
+    private static final Image icySquareImage = new ImageIcon(Arena.class.getResource("/images/arenas/winter_icy_square.png")).getImage();
 
     public Arena(){
-        this.fireImage = new ImageIcon(getClass().getResource("/images/arenas/hell_fire.gif")).getImage();
-        this.icySquareImage = new ImageIcon(getClass().getResource("/images/arenas/winter_icy_square.png")).getImage();
         this.specialSquares = new int[CharacterClass.occupiedCells.length][CharacterClass.occupiedCells[0].length];
 
         for (int i = 0; i < specialSquares.length; i++) {
@@ -38,17 +34,6 @@ public abstract class Arena implements BaseArena{
     }
 
     public abstract void setArenaEvent();
-
-    public boolean open(Team team) {
-        if (team.getTeamMembers().length < 1) {
-            System.out.println("Not enough party members!");
-            isOpened = false;
-        } else {
-            System.out.println("Welcome, heroes");
-            isOpened = true;
-        }
-        return isOpened;
-    }
 
     public String getArenaName() {
         return arenaName;

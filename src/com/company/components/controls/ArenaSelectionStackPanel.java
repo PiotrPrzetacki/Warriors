@@ -3,11 +3,8 @@ package com.company.components.controls;
 import com.company.Constants;
 import com.company.classes.arenas.Arena;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class ArenaSelectionStackPanel extends StackPanel{

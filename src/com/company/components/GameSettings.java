@@ -16,14 +16,10 @@ import java.util.List;
 public class GameSettings extends JPanel {
 
     private int gameMode;
-    private List<CharacterClass> players;
+    private final List<CharacterClass> players;
     private Arena arena;
 
-    private MainMenuPanel mainMenuPanel;
-    private CharacterSelectionPanel characterSelectionPanel;
-    private ArenaSelectionPanel arenaSelectionPanel;
-
-    private MainWindow mainWindow;
+    private final MainWindow mainWindow;
 
     public GameSettings(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
@@ -34,7 +30,7 @@ public class GameSettings extends JPanel {
     }
 
     public void setMainMenu(){
-        mainMenuPanel = new MainMenuPanel(this);
+        MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
         removeAll();
         add(mainMenuPanel);
         revalidate();
@@ -42,14 +38,14 @@ public class GameSettings extends JPanel {
     }
 
     public void setCharacterSelection(){
-        characterSelectionPanel = new CharacterSelectionPanel(this);
+        CharacterSelectionPanel characterSelectionPanel = new CharacterSelectionPanel(this);
         removeAll();
         add(characterSelectionPanel);
         SwingUtilities.updateComponentTreeUI(this);
     }
 
     public void setArenaSelectionPanel(){
-        arenaSelectionPanel = new ArenaSelectionPanel(this);
+        ArenaSelectionPanel arenaSelectionPanel = new ArenaSelectionPanel(this);
         removeAll();
         add(arenaSelectionPanel);
         SwingUtilities.updateComponentTreeUI(this);

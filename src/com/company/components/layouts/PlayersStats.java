@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class PlayersStats extends JPanel {
 
-    private CharacterClass[] players;
-    private PlayerInfoPanel[] playerInfoPanels;
+    private final CharacterClass[] players;
+    private final PlayerInfoPanel[] playerInfoPanels;
 
     public PlayersStats(CharacterClass[] players){
         this.players = players;

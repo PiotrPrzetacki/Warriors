@@ -5,7 +5,6 @@ import com.company.MainWindow;
 import com.company.Team;
 import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
-import com.company.components.controls.HealthBar;
 import com.company.components.controls.PausePanel;
 import com.company.components.controls.StartGameMenu;
 import com.company.components.layouts.PlayersStats;
@@ -17,24 +16,20 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class GameField extends JPanel {
-    private Team team;
-    private Arena arena;
-    private CharacterClass[] players;
-    private PlayersStats playersStats;
-    private PausePanel pausePanel;
-    private boolean repaintLoopEnabled;
+    private final Arena arena;
+    private final CharacterClass[] players;
+    private final PlayersStats playersStats;
+    private final PausePanel pausePanel;
+    private final boolean repaintLoopEnabled;
     private boolean pauseState;
-    private MainWindow mainWindow;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
-        this.team = team;
         this.players = team.getTeamMembers();
         this.arena = arena;
         this.playersStats = new PlayersStats(players);
         this.pausePanel = new PausePanel(mainWindow, "Game paused");
         this.repaintLoopEnabled = true;
         this.pauseState = true;
-        this.mainWindow = mainWindow;
 
         mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
         setLayout(new BorderLayout());

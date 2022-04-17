@@ -11,7 +11,6 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private Team team;
     private Arena arena;
     private GameSettings gameSettingsPanel;
     private GameField gameField;

@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class PausePanel extends JPanel {
 
-    private PauseMenu pauseMenu;
+    private final PauseMenu pauseMenu;
 
     public PausePanel(MainWindow mainWindow, String text){
         this.pauseMenu = new PauseMenu(mainWindow, text);

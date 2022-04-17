@@ -10,10 +10,10 @@ import java.awt.event.ActionEvent;
 
 public class MainMenuPanel extends JPanel {
 
-    private JButton multiplayerBtn;
-    private JButton singleplayerBtn;
-    private JButton quitBtn;
-    private GameSettings gameSettingsPanel;
+    private final JButton multiplayerBtn;
+    private final JButton singleplayerBtn;
+    private final JButton quitBtn;
+    private final GameSettings gameSettingsPanel;
 
     public MainMenuPanel(GameSettings gameSettingsPanel){
         this.gameSettingsPanel = gameSettingsPanel;

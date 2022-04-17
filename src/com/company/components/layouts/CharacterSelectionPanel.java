@@ -13,31 +13,26 @@ import java.util.List;
 
 public class CharacterSelectionPanel extends JPanel {
 
-    private GameSettings gameSettingsPanel;
+    private final GameSettings gameSettingsPanel;
 
-    private SecondaryButton nextBtn;
-
-    private List<String> availableCharacters;
-    private List<PlayerSelectionStackPanel> playerSelectionStackPanels;
-    private JPanel mainPanel;
-    private JLabel title;
+    private final List<PlayerSelectionStackPanel> playerSelectionStackPanels;
 
     public CharacterSelectionPanel(GameSettings gameSettingsPanel){
 
-        this.availableCharacters = new ArrayList<>();
+        List<String> availableCharacters = new ArrayList<>();
         this.playerSelectionStackPanels = new ArrayList<>();
 
         this.gameSettingsPanel = gameSettingsPanel;
-        this.nextBtn = new SecondaryButton("NEXT >");
-        this.nextBtn.addActionListener(this::handleClickNext);
+        SecondaryButton nextBtn = new SecondaryButton("NEXT >");
+        nextBtn.addActionListener(this::handleClickNext);
 
-        this.availableCharacters.add("Warrior");
-        this.availableCharacters.add("Archer");
-        this.availableCharacters.add("Mage");
+        availableCharacters.add("Warrior");
+        availableCharacters.add("Archer");
+        availableCharacters.add("Mage");
 
         setLayout(new BorderLayout());
 
-        title = new HeaderLabel("Select character", 1);
+        JLabel title = new HeaderLabel("Select character", 1);
 
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
@@ -54,7 +49,7 @@ public class CharacterSelectionPanel extends JPanel {
         JPanel mainPanelContainer = new JPanel();
         mainPanelContainer.setLayout(new BoxLayout(mainPanelContainer, BoxLayout.PAGE_AXIS));
 
-        this.mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 

@@ -34,11 +34,11 @@ public abstract class StackPanel<E> extends JPanel {
     }
 
     protected void changeCurrentElementIndex(String which){
-        if (which=="next") {
+        if (which.equals("next")) {
             if(currentIndex != elements.size()-1) currentIndex++;
             else currentIndex = 0;
         }
-        else if(which=="previous"){
+        else if(which.equals("previous")){
             if(currentIndex != 0) currentIndex--;
             else currentIndex = elements.size()-1;
         }

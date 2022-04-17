@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 public class MenuButton extends JButton {
 
-    private HeaderLabel textLabel;
+    private final HeaderLabel textLabel;
 
     public MenuButton(String text, ImageIcon icon, JPanel parent){
         setPreferredSize(new Dimension(80, 80));

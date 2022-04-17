@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class PlayerInfoPanel extends JPanel {
 
-    private HealthBar healthBar;
+    private final HealthBar healthBar;
     private JLabel playerNameLabel;
 
     public PlayerInfoPanel(CharacterClass player){
