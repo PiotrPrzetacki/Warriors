@@ -19,7 +19,9 @@ public class Warrior extends CharacterClass {
         this.setName(name);
         this.setX(0);
         this.setY(0);
-        this.uploadImage("assets/images/characters/WarriorBaseImage.png", "assets/images/characters/WarriorAttackLeftImage.png", "assets/images/characters/WarriorAttackRightImage.png");
+        this.uploadImage("/images/characters/WarriorBaseImage.png",
+                "/images/characters/WarriorAttackLeftImage.png",
+                "/images/characters/WarriorAttackRightImage.png");
     }
 
     public void left() {

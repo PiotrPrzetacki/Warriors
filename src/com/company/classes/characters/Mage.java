@@ -13,9 +13,9 @@ public class Mage  extends CharacterClass {
         setHealthPoints(500);
         this.className = "Mage";
         this.setAttackDistance(3);
-        this.uploadImage("assets/images/characters/MageBase.png",
-                "assets/images/characters/MageAttackLeft.png",
-                "assets/images/characters/MageAttackRight.png");
+        this.uploadImage("/images/characters/MageBase.png",
+                "/images/characters/MageAttackLeft.png",
+                "/images/characters/MageAttackRight.png");
         /*this.setLevel(1);
         this.setMaxHealthPoints(1000);
         this.setHealthPoints(1000);

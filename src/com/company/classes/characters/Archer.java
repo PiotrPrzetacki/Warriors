@@ -23,9 +23,9 @@ public class Archer  extends CharacterClass {
 
         /*this.setX(300);
         this.setY(300);*/
-        this.uploadImage("assets/images/characters/ArcherBaseImage.png",
-                "assets/images/characters/ArcherAttackLeftImage.png",
-                "assets/images/characters/ArcherAttackRightImage.png");
+        this.uploadImage("/images/characters/ArcherBaseImage.png",
+                "/images/characters/ArcherAttackLeftImage.png",
+                "/images/characters/ArcherAttackRightImage.png");
 
 
     }

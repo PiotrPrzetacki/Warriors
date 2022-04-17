@@ -29,9 +29,9 @@ public class PauseMenu extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
-        homeButton = new MenuButton("Go to main menu", new ImageIcon("assets/icons/home_icon.png"), this);
-        restartButton = new MenuButton("Restart Game", new ImageIcon("assets/icons/restart_icon.png"), this);
-        quitButton = new MenuButton("Quit", new ImageIcon("assets/icons/quit_icon.png"), this);
+        homeButton = new MenuButton("Go to main menu", new ImageIcon(getClass().getResource("/icons/home_icon.png")), this);
+        restartButton = new MenuButton("Restart Game", new ImageIcon(getClass().getResource("/icons/restart_icon.png")), this);
+        quitButton = new MenuButton("Quit", new ImageIcon(getClass().getResource("/icons/quit_icon.png")), this);
         homeButton.addActionListener(this::handleGoToMainMenu);
         restartButton.addActionListener(this::handleRestartGame);
         quitButton.addActionListener(this::handleQuit);

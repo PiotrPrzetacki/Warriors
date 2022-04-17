@@ -20,7 +20,9 @@ public class Healer  extends CharacterClass {
 
         this.setX(0);
         this.setY(300);
-        this.uploadImage("assets/images/WarriorBaseImage.png", "assets/images/WarriorAttackRightImage.png", "assets/images/WarriorAttackLeftImage.png");
+        this.uploadImage("/images/WarriorBaseImage.png",
+                "/images/WarriorAttackRightImage.png",
+                "/images/WarriorAttackLeftImage.png");
     }
     public void left() {
         int newPositionX = this.getX() > 40 ?  this.getX() - 40 : 320;

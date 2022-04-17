@@ -39,7 +39,7 @@ public class PlayerSelectionStackPanel extends StackPanel {
         });
 
         this.playerData = getClassData(availableCharacters.get(currentIndex));
-        this.classImage = new ImageIcon(playerData.get("imageURL"));
+        this.classImage = new ImageIcon(getClass().getResource(playerData.get("imageURL")));
 
         this.classNameLabel = new HeaderLabel(playerData.get("className"), 2);
 
@@ -75,16 +75,18 @@ public class PlayerSelectionStackPanel extends StackPanel {
     private Map<String, String> getClassData(String characterClassName){
         Map<String, String> data = new HashMap<>();
         data.put("className", characterClassName);
-        if(characterClassName=="Warrior") data.put("imageURL", "assets/images/characters/WarriorResizedBaseImage.png");
-        else if (characterClassName=="Archer") data.put("imageURL", "assets/images/characters/ArcherResizedBaseImage.png");
-        else if (characterClassName=="Mage") data.put("imageURL", "assets/images/characters/MageResizedBase.png");
+        switch (characterClassName) {
+            case "Warrior" -> data.put("imageURL", "/images/characters/WarriorResizedBaseImage.png");
+            case "Archer" -> data.put("imageURL", "/images/characters/ArcherResizedBaseImage.png");
+            case "Mage" -> data.put("imageURL", "/images/characters/MageResizedBase.png");
+        }
 
         return data;
     }
 
     protected void refresh(){
         this.playerData = getClassData((String) elements.get(currentIndex));
-        this.classImage = new ImageIcon(playerData.get("imageURL"));
+        this.classImage = new ImageIcon(getClass().getResource(playerData.get("imageURL")));
         this.classNameLabel.setText(playerData.get("className"));
         this.imageLabel.setIcon(classImage);
 
@@ -96,14 +98,10 @@ public class PlayerSelectionStackPanel extends StackPanel {
     }
 
     public CharacterClass getSelectedCharacter(){
-        switch (playerData.get("className")){
-            default:
-            case "Warrior":
-                return new Warrior(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-            case "Archer":
-                return new Archer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-            case "Mage":
-                return new Mage(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-        }
+        return switch (playerData.get("className")) {
+            case "Archer" -> new Archer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+            case "Mage" -> new Mage(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+            default -> new Warrior(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+        };
     }
 }

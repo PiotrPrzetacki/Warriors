@@ -230,9 +230,9 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void uploadImage(String baseImage, String attackLeftImage, String attackRightImage) {
-        this.baseImage = new ImageIcon(baseImage).getImage();
-        this.attackLeftImage = new ImageIcon(attackLeftImage).getImage();
-        this.attackRightImage = new ImageIcon(attackRightImage).getImage();
+        this.baseImage = new ImageIcon(getClass().getResource(baseImage)).getImage();
+        this.attackLeftImage = new ImageIcon(getClass().getResource(attackLeftImage)).getImage();
+        this.attackRightImage = new ImageIcon(getClass().getResource(attackRightImage)).getImage();
         setBaseImage();
     }
 
@@ -285,57 +285,7 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void tryChangePosition(int newPositionX, int newPositionY) {
-        if (occupiedCells[newPositionX][newPositionY] == 0) {
-            if (arena.getSpecialSquares()[newPositionX][newPositionY] != -3) {
-                occupiedCells[this.x][this.y] = 0;
-                occupiedCells[newPositionX][newPositionY] = this.number;
-                this.x = newPositionX;
-                this.y = newPositionY;
-            } else {
-                occupiedCells[this.x][this.y] = 0;
-                occupiedCells[newPositionX][newPositionY] = this.number;
-                int[] direction = getPlayerDirection(x, y, newPositionX, newPositionY);
-                if (direction[0] == 0) {
-                    this.x = newPositionX;
-                    this.y = newPositionY;
-                    int newX = newPositionX + (Constants.CHARACTER_WIDTH * direction[1]);
-                    canMove = false;
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    if (newX >= 0 && newX <= CharacterClass.occupiedCells[0].length) {
-                                        tryChangePosition(newX, y);
-                                    }
-                                    canMove = true;
-                                }
-                            }, 200
-                    );
-
-                } else if (direction[0] == 1) {
-                    this.x = newPositionX;
-                    this.y = newPositionY;
-                    int newY = newPositionY + (Constants.CHARACTER_HEIGHT * direction[1]);
-                    canMove = false;
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    if (newY >= 0 && newY <= CharacterClass.occupiedCells.length) {
-                                        tryChangePosition(x, newY);
-                                    }
-                                    canMove = true;
-                                }
-                            }, 200
-                    );
-
-                }
-            }
-            if (arena.getSpecialSquares()[newPositionX][newPositionY] == -2) reduceHealth(100);
-        } else{
-            reduceHealth(50);
-        }
-
+        tryChangePosition(newPositionX, newPositionY, true);
     }
 
     public void tryChangePosition(int newPositionX, int newPositionY, boolean takeDamage) {

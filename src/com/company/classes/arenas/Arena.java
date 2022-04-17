@@ -26,8 +26,8 @@ public abstract class Arena implements BaseArena{
     private boolean isOpened = false;
 
     public Arena(){
-        this.fireImage = new ImageIcon("assets/images/arenas/hell_fire.gif").getImage();
-        this.icySquareImage = new ImageIcon("assets/images/arenas/winter_icy_square.png").getImage();
+        this.fireImage = new ImageIcon(getClass().getResource("/images/arenas/hell_fire.gif")).getImage();
+        this.icySquareImage = new ImageIcon(getClass().getResource("/images/arenas/winter_icy_square.png")).getImage();
         this.specialSquares = new int[CharacterClass.occupiedCells.length][CharacterClass.occupiedCells[0].length];
 
         for (int i = 0; i < specialSquares.length; i++) {
@@ -75,8 +75,8 @@ public abstract class Arena implements BaseArena{
     }
 
     public void setImages(){
-        this.wallImage = new ImageIcon("assets/images/arenas/"+arenaName.toLowerCase()+"_wall.png").getImage();
-        this.arenaImage = new ImageIcon("assets/images/arenas/"+arenaName.toLowerCase()+"_view.png").getImage();
+        this.wallImage = new ImageIcon(getClass().getResource("/images/arenas/"+arenaName.toLowerCase()+"_wall.png")).getImage();
+        this.arenaImage = new ImageIcon(getClass().getResource("/images/arenas/"+arenaName.toLowerCase()+"_view.png")).getImage();
     }
 
     public Image getFireImage() {
@@ -110,9 +110,11 @@ public abstract class Arena implements BaseArena{
     }
 
     public Arena resetArena(String arenaClassName) {
-        if(arenaClassName.equals("Desert")) return new Desert();
-        else if(arenaClassName.equals("Hell")) return new Hell();
-        else if(arenaClassName.equals("Jungle")) return new Jungle();
-        else return new Winter();
+        return switch (arenaClassName) {
+            case "Desert" -> new Desert();
+            case "Hell" -> new Hell();
+            case "Jungle" -> new Jungle();
+            default -> new Winter();
+        };
     }
 }
