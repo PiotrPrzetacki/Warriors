@@ -32,9 +32,4 @@ public class Desert extends Arena{
         walls.add(new int[]{18, 6});
         walls.add(new int[]{19, 6});
     }
-
-    @Override
-    public void setArenaEvent() {
-
-    }
 }

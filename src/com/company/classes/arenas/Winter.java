@@ -78,7 +78,8 @@ public class Winter extends Arena{
     }
 
     @Override
-    public void setArenaEvent() {
+    public void resetArena() {
+        super.resetArena();
         getRandomSquares(icySquaresCount, icySquareNumber);
     }
 }

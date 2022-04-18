@@ -35,11 +35,11 @@ public class MainWindow extends JFrame {
 
         }
         CharacterClass.resetOccupiedCells();
-        this.arena = arena.resetArena(arena.getArenaName());
+        arena.resetArena();
         for(CharacterClass player : team.getTeamMembers()){
             player.setHealthPoints(player.getMaxHealthPoints());
         }
-        this.gameField = new GameField(this, team, this.arena);
+        this.gameField = new GameField(this, team, arena);
         add(gameField);
         gameField.requestFocusInWindow();
         revalidate();
@@ -47,18 +47,21 @@ public class MainWindow extends JFrame {
 
     }
 
-    public void goToMainMenu(){
+    public void goToMainMenu(Arena arena){
+
         try {
             remove(gameField);
         }catch(NullPointerException e){
 
         }
+        arena.closeArena();
         CharacterClass.resetOccupiedCells();
         CharacterClass.setPlayerCount(CharacterClass.getPlayerCount()-2);
         gameSettingsPanel = new GameSettings(this);
         add(gameSettingsPanel);
         revalidate();
         repaint();
+        System.gc();
     }
 
     public GameSettings getGameSettingsPanel() {

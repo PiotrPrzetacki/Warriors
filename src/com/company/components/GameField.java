@@ -36,10 +36,10 @@ public class GameField extends JPanel {
         mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
         setLayout(new BorderLayout());
         setPlayersArena();
+        arena.resetArena();
         setPlayersPositions();
         setRepaintLoop();
         setWalls(arena.getWalls());
-        arena.setArenaEvent();
         setBackground(arena.getBackgroundColor());
         add(playersStats, BorderLayout.SOUTH);
 
@@ -52,7 +52,6 @@ public class GameField extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         playersStats.refresh();
 
         if(pauseState) checkGameOver();
@@ -81,6 +80,7 @@ public class GameField extends JPanel {
     }
 
     public class FieldKeyListener extends KeyAdapter {
+
         @Override
         public void keyPressed(KeyEvent e) {
             super.keyPressed(e);
@@ -101,37 +101,25 @@ public class GameField extends JPanel {
                     }
                 }
                 if(player.getCanAttack()) {
+                    Timer timer = new Timer(150, e1 -> {
+                        player.setBaseImage();
+                        repaint();
+                    });
+                    timer.setRepeats(false);
+
                     if (key == player.getLeftAttackKey()) {
                         player.setAttackLeftImage();
 
                         player.attack(1, players);
+                        timer.start();
 
-                        //timer
-                        new java.util.Timer().schedule(
-                                new java.util.TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        player.setBaseImage();
-                                        repaint();
-                                    }
-                                }, 200
-                        );
                     }
                     if (key == player.getRightAttackKey()) {
                         player.setAttackRightImage();
 
                         player.attack(0, players);
 
-                        //timer
-                        new java.util.Timer().schedule(
-                                new java.util.TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        player.setBaseImage();
-                                        repaint();
-                                    }
-                                }, 200
-                        );
+                        timer.start();
                     }
                 }
             }
@@ -167,12 +155,7 @@ public class GameField extends JPanel {
     }
 
     private void setRepaintLoop(){
-        new Timer(20, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                repaint();
-            }
-        }).start();
+        new Timer(20, e -> repaint()).start();
     }
 
     public void setPlayersCanMove(boolean canMove){

@@ -24,44 +24,23 @@ public class StartGameMenu extends JPanel {
         add(label, BorderLayout.NORTH);
         StartGameMenu _this = this;
 
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        label.setText(" 2 ");
-                        new java.util.Timer().schedule(
-                                new java.util.TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        label.setText(" 1 ");
-
-                                        new java.util.Timer().schedule(
-                                                new java.util.TimerTask() {
-                                                    @Override
-                                                    public void run() {
-                                                        label.setText("Fight!");
-                                                        gameField.setPlayersCanAttack(true);
-                                                        gameField.setPlayersCanMove(true);
-
-                                                        new java.util.Timer().schedule(
-                                                                new java.util.TimerTask() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        remove(label);
-                                                                        gameField.remove(_this);
-                                                                    }
-                                                                }, 500
-                                                        );
-                                                    }
-                                                }, 1000
-                                        );
-
-                                    }
-                                }, 1000
-                        );
-                    }
-                }, 1000
-        );
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                Thread.sleep(1000);
+                label.setText(" 2 ");
+                Thread.sleep(1000);
+                label.setText(" 1 ");
+                Thread.sleep(1000);
+                label.setText("Fight!");
+                gameField.setPlayersCanAttack(true);
+                gameField.setPlayersCanMove(true);
+                Thread.sleep(500);
+                remove(label);
+                gameField.remove(_this);
+                return null;
+            }
+        }.execute();
 
     }
 }

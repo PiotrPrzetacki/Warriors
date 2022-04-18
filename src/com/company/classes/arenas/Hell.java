@@ -1,6 +1,7 @@
 package com.company.classes.arenas;
 
 import com.company.classes.CharacterClass;
+import com.company.classes.arenas.eventWorkers.FireSpawnWorker;
 import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
@@ -44,45 +45,37 @@ public class Hell extends Arena{
         walls.add(new int[]{16, 5});
         walls.add(new int[]{17, 5});
 
-        eventWorker = new PausableSwingWorker<>() {
-            @Override
-            protected Void doInBackground() throws InterruptedException {
-
-                while (!isCancelled()) {
-                    sleep(fireCooldown);
-                    if (!isPaused()) {
-                        getRandomSquares(fireSquaresCount, fireSquareNumber);
-                    }
-                    sleep(fireDuration);
-                    if (!isPaused()){
-                        for (int i = 0; i < CharacterClass.occupiedCells.length; i++) {
-                            for (int j = 0; j < CharacterClass.occupiedCells[0].length; j++) {
-                                if (specialSquares[i][j] == -2) {
-                                    specialSquares[i][j] = 0;
-                                }
-                            }
-                        }
-                    } else {
-                        Thread.sleep(50);
-                    }
-                }
-                return null;
-            }
-
-            private void sleep(int milliseconds) throws InterruptedException {
-                int interval = 10;
-                for(int i=0; i<milliseconds; i+=interval){
-                    Thread.sleep(interval);
-                    if(isPaused()) i-= interval;
-                    System.out.println(i);
-                }
-            }
-        };
+        eventWorker = new FireSpawnWorker(this);
         backgroundWorkers.add(eventWorker);
     }
 
     @Override
-    public void setArenaEvent() {
+    public void resetArena() {
+        super.resetArena();
+        eventWorker.cancel(true);
+        eventWorker = new FireSpawnWorker(this);
+        backgroundWorkers.add(eventWorker);
         eventWorker.execute();
+    }
+
+    @Override
+    public void closeArena(){
+        eventWorker.cancel(true);
+    }
+
+    public int getFireSquaresCount() {
+        return fireSquaresCount;
+    }
+
+    public int getFireDuration() {
+        return fireDuration;
+    }
+
+    public int getFireCooldown() {
+        return fireCooldown;
+    }
+
+    public int getFireSquareNumber() {
+        return fireSquareNumber;
     }
 }

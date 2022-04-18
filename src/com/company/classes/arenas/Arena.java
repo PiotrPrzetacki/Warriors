@@ -37,7 +37,6 @@ public abstract class Arena{
         }
     }
 
-    public abstract void setArenaEvent();
 
     public String getArenaName() {
         return arenaName;
@@ -76,7 +75,7 @@ public abstract class Arena{
         this.eventEnabled = eventEnabled;
     }
 
-    protected void getRandomSquares(int squaresAmount, int type) {
+    public void getRandomSquares(int squaresAmount, int type) {
         for (int[] wall : walls) {
             specialSquares[(wall[0] * Constants.CHARACTER_WIDTH)][(wall[1] * Constants.CHARACTER_HEIGHT)] = -1;
         }
@@ -85,7 +84,7 @@ public abstract class Arena{
             do {
                 x = (((int) (Math.random() * Constants.WINDOW_WIDTH)) / Constants.CHARACTER_WIDTH) * Constants.CHARACTER_WIDTH;
                 y = (((int) (Math.random() * Constants.WINDOW_HEIGHT)) / Constants.CHARACTER_HEIGHT) * Constants.CHARACTER_HEIGHT;
-            } while (specialSquares[x][y] != 0 && CharacterClass.occupiedCells[x][y] != 0);
+            } while (specialSquares[x][y] != 0 || CharacterClass.occupiedCells[x][y] != 0);
             specialSquares[x][y] = type;
         }
     }
@@ -98,13 +97,18 @@ public abstract class Arena{
         return icySquareImage;
     }
 
-    public Arena resetArena(String arenaClassName) {
-        return switch (arenaClassName) {
-            case "Desert" -> new Desert();
-            case "Hell" -> new Hell();
-            case "Jungle" -> new Jungle();
-            default -> new Winter();
-        };
+    public void resetArena() {
+        this.backgroundWorkers.clear();
+
+        for (int i = 0; i < specialSquares.length; i++) {
+            for (int j = 0; j < specialSquares[0].length; j++) {
+                specialSquares[i][j] = 0;
+            }
+        }
+    }
+
+    public void closeArena(){
+
     }
 
     public void pauseBackgroundWorkers(){

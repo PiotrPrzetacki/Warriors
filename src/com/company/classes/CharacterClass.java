@@ -363,7 +363,11 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public static void resetOccupiedCells(){
-        CharacterClass.occupiedCells = new int[Constants.WINDOW_WIDTH][Constants.WINDOW_HEIGHT];
+        for(int i=0; i<CharacterClass.occupiedCells.length; i++){
+            for(int j=0; j<CharacterClass.occupiedCells[0].length; j++){
+                CharacterClass.occupiedCells[i][j] = 0;
+            }
+        }
     }
 
     @Override
