@@ -65,4 +65,7 @@ public class MainWindow extends JFrame {
         return gameSettingsPanel;
     }
 
+    public GameField getGameField() {
+        return gameField;
+    }
 }

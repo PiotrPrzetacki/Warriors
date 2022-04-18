@@ -1,7 +1,7 @@
 package com.company.classes.arenas;
 
-import com.company.Constants;
 import com.company.classes.CharacterClass;
+import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +13,7 @@ public class Hell extends Arena{
     private int fireDuration;
     private int fireCooldown;
     private int fireSquareNumber;
+    private PausableSwingWorker<Void, Void> eventWorker;
 
     public Hell() {
         this.arenaName = "Hell";
@@ -42,34 +43,46 @@ public class Hell extends Arena{
         walls.add(new int[]{2, 5});
         walls.add(new int[]{16, 5});
         walls.add(new int[]{17, 5});
+
+        eventWorker = new PausableSwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws InterruptedException {
+
+                while (!isCancelled()) {
+                    sleep(fireCooldown);
+                    if (!isPaused()) {
+                        getRandomSquares(fireSquaresCount, fireSquareNumber);
+                    }
+                    sleep(fireDuration);
+                    if (!isPaused()){
+                        for (int i = 0; i < CharacterClass.occupiedCells.length; i++) {
+                            for (int j = 0; j < CharacterClass.occupiedCells[0].length; j++) {
+                                if (specialSquares[i][j] == -2) {
+                                    specialSquares[i][j] = 0;
+                                }
+                            }
+                        }
+                    } else {
+                        Thread.sleep(50);
+                    }
+                }
+                return null;
+            }
+
+            private void sleep(int milliseconds) throws InterruptedException {
+                int interval = 10;
+                for(int i=0; i<milliseconds; i+=interval){
+                    Thread.sleep(interval);
+                    if(isPaused()) i-= interval;
+                    System.out.println(i);
+                }
+            }
+        };
+        backgroundWorkers.add(eventWorker);
     }
 
     @Override
     public void setArenaEvent() {
-        if(eventEnabled) {
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            getRandomSquares(fireSquaresCount, fireSquareNumber);
-                            new java.util.Timer().schedule(
-                                    new java.util.TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            for (int i = 0; i < CharacterClass.occupiedCells.length; i++) {
-                                                for (int j = 0; j < CharacterClass.occupiedCells[0].length; j++) {
-                                                    if (specialSquares[i][j] == -2) {
-                                                        specialSquares[i][j] = 0;
-                                                    }
-                                                }
-                                            }
-                                            setArenaEvent();
-                                        }
-                                    }, fireDuration
-                            );
-                        }
-                    }, fireCooldown
-            );
-        }
+        eventWorker.execute();
     }
 }

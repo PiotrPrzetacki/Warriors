@@ -11,6 +11,8 @@ import com.company.components.layouts.PlayersStats;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -165,17 +167,12 @@ public class GameField extends JPanel {
     }
 
     private void setRepaintLoop(){
-        if(repaintLoopEnabled) {
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            repaint();
-                            setRepaintLoop();
-                        }
-                    }, 30
-            );
-        }
+        new Timer(20, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                repaint();
+            }
+        }).start();
     }
 
     public void setPlayersCanMove(boolean canMove){
@@ -190,14 +187,21 @@ public class GameField extends JPanel {
         }
     }
 
+    public Arena getArena() {
+        return arena;
+    }
+
     private void pauseGame(boolean pauseState){
         pausePanel.refresh();
         if(pauseState) {
+            arena.resumeBackgroundWorkers();
             setPlayersCanMove(true);
             setPlayersCanAttack(true);
             remove(pausePanel);
+
         }
         else {
+            arena.pauseBackgroundWorkers();
             setPlayersCanMove(false);
             setPlayersCanAttack(false);
             add(pausePanel, BorderLayout.CENTER);

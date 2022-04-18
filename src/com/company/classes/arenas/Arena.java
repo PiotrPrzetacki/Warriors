@@ -3,10 +3,12 @@ package com.company.classes.arenas;
 import com.company.Constants;
 import com.company.Team;
 import com.company.classes.CharacterClass;
+import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
 import java.awt.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Arena{
@@ -19,12 +21,14 @@ public abstract class Arena{
     protected List<int[]> playersSpawnPoints;
     protected boolean eventEnabled;
     protected int[][] specialSquares;
+    protected List<PausableSwingWorker> backgroundWorkers;
 
     private static final Image fireImage = new ImageIcon(Arena.class.getResource("/images/arenas/hell_fire.gif")).getImage();
     private static final Image icySquareImage = new ImageIcon(Arena.class.getResource("/images/arenas/winter_icy_square.png")).getImage();
 
     public Arena(){
         this.specialSquares = new int[CharacterClass.occupiedCells.length][CharacterClass.occupiedCells[0].length];
+        this.backgroundWorkers = new ArrayList<>();
 
         for (int i = 0; i < specialSquares.length; i++) {
             for (int j = 0; j < specialSquares[0].length; j++) {
@@ -101,5 +105,23 @@ public abstract class Arena{
             case "Jungle" -> new Jungle();
             default -> new Winter();
         };
+    }
+
+    public void pauseBackgroundWorkers(){
+        for(PausableSwingWorker worker : backgroundWorkers){
+            worker.pause();
+        }
+    }
+
+    public void resumeBackgroundWorkers(){
+        for(PausableSwingWorker worker : backgroundWorkers){
+            worker.resume();
+        }
+    }
+
+    public void cancelBackgroundWorkers(){
+        for(PausableSwingWorker worker : backgroundWorkers){
+            worker.cancel(true);
+        }
     }
 }

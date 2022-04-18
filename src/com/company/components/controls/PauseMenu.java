@@ -47,6 +47,7 @@ public class PauseMenu extends JPanel {
         mainWindow.goToMainMenu();
     }
     private void handleRestartGame(ActionEvent e){
+        mainWindow.getGameField().getArena().cancelBackgroundWorkers();
         mainWindow.startGame(mainWindow.getGameSettingsPanel().getGameMode(),
                              new Team(mainWindow.getGameSettingsPanel().getPlayers()),
                              mainWindow.getGameSettingsPanel().getArena());
