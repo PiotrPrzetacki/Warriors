@@ -10,8 +10,8 @@ public class TitleLabel extends JLabel {
     public TitleLabel(String text){
         super("Warriors");
         this.setHorizontalAlignment(JLabel.CENTER);
-        this.setBorder(BorderFactory.createEmptyBorder(45, 0, 0, 0));
+        this.setBorder(BorderFactory.createEmptyBorder(65, 0, 0, 0));
         this.setFont(Constants.titleFont);
-        this.setForeground(Color.black);
+        this.setForeground(new Color(0x964F07));
     }
 }

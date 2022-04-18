@@ -17,6 +17,7 @@ public class StartGameMenu extends JPanel {
         setLayout(new BorderLayout());
         JLabel label = new JLabel(" 3 ");
         label.setFont(new Font(Constants.defaultFontFamily, Font.ITALIC, 40));
+        label.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
         label.setOpaque(true);
         label.setBackground(new Color(255, 255, 255, 60));
         label.setHorizontalAlignment(JLabel.CENTER);

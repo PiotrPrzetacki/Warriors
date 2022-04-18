@@ -17,7 +17,7 @@ public class MenuButton extends JButton {
         setIcon(icon);
         setFocusable(false);
 
-        textLabel = new HeaderLabel(text, 2);
+        textLabel = new HeaderLabel(text, 3);
 
         this.addMouseListener(new MouseAdapter() {
             @Override
