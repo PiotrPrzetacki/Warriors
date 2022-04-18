@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import static com.company.utils.ResourceLoader.load;
+
 public class PauseMenu extends JPanel {
 
     private final JLabel titleLabel;
@@ -25,9 +27,9 @@ public class PauseMenu extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
-        JButton homeButton = new MenuButton("Go to main menu", new ImageIcon(getClass().getResource("/icons/home_icon.png")), this);
-        JButton restartButton = new MenuButton("Restart Game", new ImageIcon(getClass().getResource("/icons/restart_icon.png")), this);
-        JButton quitButton = new MenuButton("Quit", new ImageIcon(getClass().getResource("/icons/quit_icon.png")), this);
+        JButton homeButton = new MenuButton("Go to main menu", new ImageIcon(load("/icons/home_icon.png")), this);
+        JButton restartButton = new MenuButton("Restart Game", new ImageIcon(load("/icons/restart_icon.png")), this);
+        JButton quitButton = new MenuButton("Quit", new ImageIcon(load("/icons/quit_icon.png")), this);
         homeButton.addActionListener(this::handleGoToMainMenu);
         restartButton.addActionListener(this::handleRestartGame);
         quitButton.addActionListener(this::handleQuit);

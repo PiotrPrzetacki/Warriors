@@ -11,6 +11,8 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
+import static com.company.utils.ResourceLoader.load;
+
 public class PlayerSelectionStackPanel extends StackPanel {
 
     private ImageIcon classImage;
@@ -39,7 +41,7 @@ public class PlayerSelectionStackPanel extends StackPanel {
         });
 
         this.playerData = getClassData(availableCharacters.get(currentIndex));
-        this.classImage = new ImageIcon(getClass().getResource(playerData.get("imageURL")));
+        this.classImage = new ImageIcon(load(playerData.get("imageURL")));
 
         this.classNameLabel = new HeaderLabel(playerData.get("className"), 2);
 
@@ -86,7 +88,7 @@ public class PlayerSelectionStackPanel extends StackPanel {
 
     protected void refresh(){
         this.playerData = getClassData((String) elements.get(currentIndex));
-        this.classImage = new ImageIcon(getClass().getResource(playerData.get("imageURL")));
+        this.classImage = new ImageIcon(load(playerData.get("imageURL")));
         this.classNameLabel.setText(playerData.get("className"));
         this.imageLabel.setIcon(classImage);
 

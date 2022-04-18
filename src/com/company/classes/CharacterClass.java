@@ -7,6 +7,8 @@ import com.company.components.GameField;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.company.utils.ResourceLoader.load;
+
 public abstract class CharacterClass implements BaseClass {
     public static int[][] occupiedCells = new int[Constants.WINDOW_WIDTH][Constants.WINDOW_HEIGHT];
     public static int playerCount = 0;
@@ -230,9 +232,9 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void uploadImage(String baseImage, String attackLeftImage, String attackRightImage) {
-        this.baseImage = new ImageIcon(getClass().getResource(baseImage)).getImage();
-        this.attackLeftImage = new ImageIcon(getClass().getResource(attackLeftImage)).getImage();
-        this.attackRightImage = new ImageIcon(getClass().getResource(attackRightImage)).getImage();
+        this.baseImage = new ImageIcon(load(baseImage)).getImage();
+        this.attackLeftImage = new ImageIcon(load(attackLeftImage)).getImage();
+        this.attackRightImage = new ImageIcon(load(attackRightImage)).getImage();
         setBaseImage();
     }
 
