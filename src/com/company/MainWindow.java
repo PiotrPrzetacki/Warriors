@@ -8,6 +8,8 @@ import com.company.classes.arenas.Arena;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.company.utils.ResourceLoader.load;
+
 
 public class MainWindow extends JFrame {
 
@@ -20,6 +22,7 @@ public class MainWindow extends JFrame {
         setSize(new Dimension(width+15, height));
         setLocationRelativeTo(null);
         setTitle("Warriors");
+        setIconImage(new ImageIcon(load("/icons/Warriors-icon.png")).getImage());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         gameSettingsPanel = new GameSettings(this);
@@ -48,7 +51,6 @@ public class MainWindow extends JFrame {
     }
 
     public void goToMainMenu(Arena arena){
-
         try {
             remove(gameField);
         }catch(NullPointerException e){

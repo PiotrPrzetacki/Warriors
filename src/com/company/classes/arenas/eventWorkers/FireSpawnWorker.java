@@ -41,7 +41,6 @@ public class FireSpawnWorker extends PausableSwingWorker {
         for(int i=0; i<milliseconds; i+=interval){
             Thread.sleep(interval);
             if(isPaused()) i-= interval;
-            System.out.println(i);
         }
     }
 }
