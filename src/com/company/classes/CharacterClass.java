@@ -6,6 +6,8 @@ import com.company.components.GameField;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static com.company.utils.ResourceLoader.load;
 
@@ -27,6 +29,7 @@ public abstract class CharacterClass implements BaseClass {
     private boolean canMove;
     private boolean canAttack;
     private int attackDistance;
+    private Timer fireTimer;
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -337,7 +340,24 @@ public abstract class CharacterClass implements BaseClass {
 
                 }
             }
-            if (arena.getSpecialSquares()[newPositionX][newPositionY] == -2) reduceHealth(100);
+            if (arena.getSpecialSquares()[newPositionX][newPositionY] == -2) {
+                if(fireTimer==null) {
+                    fireTimer = new Timer(500, null);
+                    fireTimer.addActionListener(e -> {
+                        if (arena.getSpecialSquares()[newPositionX][newPositionY] == -2 &&
+                                CharacterClass.occupiedCells[newPositionX][newPositionY] == this.number) {
+                            reduceHealth(50);
+                        } else {
+                            fireTimer.setRepeats(false);
+                            fireTimer.stop();
+                            fireTimer = null;
+                        }
+                    });
+                    fireTimer.setInitialDelay(0);
+                    fireTimer.setRepeats(true);
+                    fireTimer.start();
+                }
+            }
         } else if(takeDamage){
             reduceHealth(50);
         }
