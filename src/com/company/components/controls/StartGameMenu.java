@@ -2,11 +2,14 @@ package com.company.components.controls;
 
 import com.company.Constants;
 import com.company.components.GameField;
+import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class StartGameMenu extends JPanel {
+
+    private PausableSwingWorker<Void, Void> startGameWorker;
 
     public StartGameMenu(GameField gameField){
 
@@ -25,23 +28,29 @@ public class StartGameMenu extends JPanel {
         add(label, BorderLayout.NORTH);
         StartGameMenu _this = this;
 
-        new SwingWorker<Void, Void>() {
+        startGameWorker = new PausableSwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                Thread.sleep(1000);
-                label.setText(" 2 ");
-                Thread.sleep(1000);
-                label.setText(" 1 ");
-                Thread.sleep(1000);
-                label.setText("Fight!");
-                gameField.setPlayersCanAttack(true);
-                gameField.setPlayersCanMove(true);
-                Thread.sleep(500);
-                remove(label);
-                gameField.remove(_this);
+                while(!isCancelled()) {
+                    sleep(800);
+                    label.setText(" 2 ");
+                    sleep(800);
+                    label.setText(" 1 ");
+                    sleep(800);
+                    label.setText("Fight!");
+                    gameField.setPlayersCanAttack(true);
+                    gameField.setPlayersCanMove(true);
+                    sleep(500);
+                    remove(label);
+                    gameField.remove(_this);
+                }
                 return null;
             }
-        }.execute();
+        };
+        startGameWorker.execute();
+    }
 
+    public PausableSwingWorker<Void, Void> getStartGameWorker() {
+        return startGameWorker;
     }
 }

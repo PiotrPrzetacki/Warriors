@@ -8,11 +8,10 @@ import com.company.classes.arenas.Arena;
 import com.company.components.controls.PausePanel;
 import com.company.components.controls.StartGameMenu;
 import com.company.components.layouts.PlayersStats;
+import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -24,12 +23,14 @@ public class GameField extends JPanel {
     private final PausePanel pausePanel;
     private final boolean repaintLoopEnabled;
     private boolean pauseState;
+    private StartGameMenu startGameMenu;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
         this.players = team.getTeamMembers();
         this.arena = arena;
         this.playersStats = new PlayersStats(players);
         this.pausePanel = new PausePanel(mainWindow, "Game paused");
+        this.startGameMenu = new StartGameMenu(this);
         this.repaintLoopEnabled = true;
         this.pauseState = true;
 
@@ -43,7 +44,7 @@ public class GameField extends JPanel {
         setBackground(arena.getBackgroundColor());
         add(playersStats, BorderLayout.SOUTH);
 
-        add(new StartGameMenu(this), BorderLayout.CENTER);
+        add(startGameMenu, BorderLayout.CENTER);
 
         setFocusable(true);
         addKeyListener(new FieldKeyListener());
@@ -54,7 +55,15 @@ public class GameField extends JPanel {
         super.paintComponent(g);
         playersStats.refresh();
 
-        if(pauseState) checkGameOver();
+        if(pauseState) {
+            checkGameOver();
+            startGameMenu.getStartGameWorker().resume();
+        }
+        else{
+            setPlayersCanAttack(false);
+            setPlayersCanMove(false);
+            startGameMenu.getStartGameWorker().pause();
+        }
 
         for (CharacterClass player : players) {
             g.drawImage(player.getImage(), player.getX(), player.getY(), this);
@@ -189,7 +198,7 @@ public class GameField extends JPanel {
             setPlayersCanAttack(false);
             add(pausePanel, BorderLayout.CENTER);
         }
-        SwingUtilities.updateComponentTreeUI(this);
+        pausePanel.refresh();
     }
 
     private void checkGameOver(){
@@ -204,5 +213,10 @@ public class GameField extends JPanel {
                 break;
             }
         }
+    }
+
+    public void closeGameField(){
+        arena.closeArena();
+        startGameMenu.getStartGameWorker().cancel(true);
     }
 }

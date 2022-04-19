@@ -23,4 +23,12 @@ public abstract class PausableSwingWorker<K, V> extends SwingWorker<K, V> {
     public final boolean isPaused() {
         return isPaused;
     }
+
+    protected void sleep(int milliseconds) throws InterruptedException {
+        int interval = 50;
+        for(int i=0; i<milliseconds; i+=interval){
+            Thread.sleep(interval);
+            if(isPaused()) i-= interval;
+        }
+    }
 }

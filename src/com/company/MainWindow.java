@@ -56,7 +56,7 @@ public class MainWindow extends JFrame {
         }catch(NullPointerException e){
 
         }
-        arena.closeArena();
+        gameField.closeGameField();
         CharacterClass.resetOccupiedCells();
         CharacterClass.setPlayerCount(CharacterClass.getPlayerCount()-2);
         gameSettingsPanel = new GameSettings(this);

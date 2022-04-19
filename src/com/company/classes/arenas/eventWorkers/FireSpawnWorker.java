@@ -30,17 +30,9 @@ public class FireSpawnWorker extends PausableSwingWorker {
                     }
                 }
             } else {
-                Thread.sleep(50);
+                sleep(50);
             }
         }
         return null;
-    }
-
-    private void sleep(int milliseconds) throws InterruptedException {
-        int interval = 10;
-        for(int i=0; i<milliseconds; i+=interval){
-            Thread.sleep(interval);
-            if(isPaused()) i-= interval;
-        }
     }
 }

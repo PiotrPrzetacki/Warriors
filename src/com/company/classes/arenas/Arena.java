@@ -11,6 +11,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.company.utils.ResourceLoader.load;
+
 public abstract class Arena{
 
     protected String arenaName;
@@ -23,8 +25,8 @@ public abstract class Arena{
     protected int[][] specialSquares;
     protected List<PausableSwingWorker> backgroundWorkers;
 
-    private static final Image fireImage = new ImageIcon(Arena.class.getResource("/images/arenas/hell_fire.gif")).getImage();
-    private static final Image icySquareImage = new ImageIcon(Arena.class.getResource("/images/arenas/winter_icy_square.png")).getImage();
+    private static final Image fireImage = new ImageIcon(load("/images/arenas/hell_fire.gif")).getImage();
+    private static final Image icySquareImage = new ImageIcon(load("/images/arenas/winter_icy_square.png")).getImage();
 
     public Arena(){
         this.specialSquares = new int[CharacterClass.occupiedCells.length][CharacterClass.occupiedCells[0].length];
@@ -63,8 +65,8 @@ public abstract class Arena{
     }
 
     public void setImages(){
-        this.wallImage = new ImageIcon(getClass().getResource("/images/arenas/"+arenaName.toLowerCase()+"_wall.png")).getImage();
-        this.arenaImage = new ImageIcon(getClass().getResource("/images/arenas/"+arenaName.toLowerCase()+"_view.png")).getImage();
+        this.wallImage = new ImageIcon(load("/images/arenas/"+arenaName.toLowerCase()+"_wall.png")).getImage();
+        this.arenaImage = new ImageIcon(load("/images/arenas/"+arenaName.toLowerCase()+"_view.png")).getImage();
     }
 
     public Image getFireImage() {
