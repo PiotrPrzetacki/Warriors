@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerInfoPanel extends JPanel {
 
@@ -16,8 +17,9 @@ public class PlayerInfoPanel extends JPanel {
         this.healthPanel = new HealthPanel(player);
 
         abilityPanels = new ArrayList<>();
-        abilityPanels.add(new AbilityPanel("move", player));
-        abilityPanels.add(new AbilityPanel("attack", player));
+        player.getAbilityTimeouts().forEach((abilityName, currentCooldown) -> {
+            abilityPanels.add(new AbilityPanel(abilityName, player));
+        });
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(healthPanel);

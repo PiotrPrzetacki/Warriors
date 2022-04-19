@@ -11,30 +11,31 @@ public class Archer  extends CharacterClass {
         this.setHealthPoints(1000);
         this.setAttackCooldown(250);
         this.setMoveCooldown(210);
+        this.teleportCooldown = 6000;
         this.className = "Archer";
         this.setAttackDistance(2);
         this.uploadImage("/images/characters/ArcherBaseImage.png",
                 "/images/characters/ArcherAttackLeftImage.png",
                 "/images/characters/ArcherAttackRightImage.png");
 
+        getAbilityTimeouts().put("teleport", 0);
 
     }
 
+    @Override
     public void left() {
-        int newPositionX = this.getX() >= Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH);
-        tryChangePosition(newPositionX, this.getY());
+        teleportLeft();
     }
+    @Override
     public void right() {
-        int newPositionX = this.getX() < (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH) ?  this.getX() + Constants.CHARACTER_WIDTH : 0;
-        tryChangePosition(newPositionX, this.getY());
-
+        teleportRight();
     }
+    @Override
     public void up() {
-        int newPositionY = this.getY() >= Constants.CHARACTER_HEIGHT ?  this.getY() - Constants.CHARACTER_HEIGHT : (Constants.WINDOW_HEIGHT-Constants.CHARACTER_HEIGHT-40);
-        tryChangePosition(this.getX(), newPositionY);
+        teleportUp();
     }
+    @Override
     public void down() {
-        int newPositionY = this.getY() < (Constants.WINDOW_HEIGHT-Constants.CHARACTER_HEIGHT-40) ?  this.getY() + Constants.CHARACTER_HEIGHT : 0;
-        tryChangePosition(this.getX(), newPositionY);
+        teleportDown();
     }
 }

@@ -27,10 +27,16 @@ public abstract class CharacterClass implements BaseClass {
     private int leftKey, rightKey, upKey, downKey, leftAttackKey,rightAttackKey;
     protected String className;
     private Arena arena;
+
     private boolean canMove;
     private int moveCooldown;
+
     private boolean canAttack;
     private int attackCooldown;
+
+    protected boolean canTeleport;
+    protected int teleportCooldown;
+
     private int attackDistance;
     private Timer fireTimer;
     private boolean showBlood;
@@ -206,7 +212,7 @@ public abstract class CharacterClass implements BaseClass {
         }
     }
 
-    private void resetTimeout(String ability, int cooldown) {
+    protected void resetTimeout(String ability, int cooldown) {
         new SwingWorker<Void, Void>(){
             @Override
             protected Void doInBackground() throws InterruptedException {
@@ -417,13 +423,22 @@ public abstract class CharacterClass implements BaseClass {
         setHealthPoints(this.getHealthPoints() - amount);
     }
 
-    public abstract void left();
-
-    public abstract void right();
-
-    public abstract void up();
-
-    public abstract void down();
+    public void left() {
+        int newPositionX = this.getX() > Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : 0;
+        tryChangePosition(newPositionX, this.getY());
+    }
+    public void right() {
+        int newPositionX = this.getX() < (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH) ?  this.getX() + Constants.CHARACTER_WIDTH : (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH);
+        tryChangePosition(newPositionX, this.getY());
+    }
+    public void up() {
+        int newPositionY = this.getY() >= Constants.CHARACTER_HEIGHT ?  this.getY() - Constants.CHARACTER_HEIGHT : 0;
+        tryChangePosition(this.getX(), newPositionY);
+    }
+    public void down() {
+        int newPositionY = this.getY()+Constants.CHARACTER_HEIGHT+40 < (Constants.WINDOW_HEIGHT) ?  this.getY() + Constants.CHARACTER_HEIGHT : (Constants.WINDOW_HEIGHT-Constants.CHARACTER_HEIGHT-40);
+        tryChangePosition(this.getX(), newPositionY);
+    }
 
     public int getAttackDistance() {
         return attackDistance;
@@ -489,5 +504,81 @@ public abstract class CharacterClass implements BaseClass {
 
     public void setShowBlood(boolean showBlood) {
         this.showBlood = showBlood;
+    }
+
+    public void teleportLeft() {
+        int newPositionX;
+        if(this.getX() >= Constants.CHARACTER_WIDTH){
+            newPositionX = this.getX() - Constants.CHARACTER_WIDTH;
+            tryChangePosition(newPositionX, this.getY());
+        } else {
+            if(getAbilityTimeouts().get("teleport")==0) {
+                newPositionX = Constants.WINDOW_WIDTH - Constants.CHARACTER_WIDTH;
+                getAbilityTimeouts().replace("teleport", teleportCooldown);
+                resetTimeout("teleport", teleportCooldown);
+                tryChangePosition(newPositionX, this.getY());
+            }
+            else{
+                newPositionX = this.getX() > Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : 0;
+                tryChangePosition(newPositionX, this.getY());
+            }
+        }
+    }
+    public void teleportRight() {
+
+        int newPositionX;
+        if(this.getX() < (Constants.WINDOW_WIDTH - Constants.CHARACTER_WIDTH)){
+            newPositionX = this.getX() + Constants.CHARACTER_WIDTH;
+            tryChangePosition(newPositionX, this.getY());
+        } else {
+            if(getAbilityTimeouts().get("teleport")==0) {
+                newPositionX = 0;
+                getAbilityTimeouts().replace("teleport", teleportCooldown);
+                resetTimeout("teleport", teleportCooldown);
+                tryChangePosition(newPositionX, this.getY());
+            }
+            else{
+                newPositionX = this.getX() < (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH) ?  this.getX() + Constants.CHARACTER_WIDTH : (Constants.WINDOW_WIDTH-Constants.CHARACTER_WIDTH);
+                tryChangePosition(newPositionX, this.getY());
+            }
+        }
+    }
+    public void teleportUp() {
+
+        int newPositionY;
+        if(this.getY() >= Constants.CHARACTER_HEIGHT){
+            newPositionY = this.getY() - Constants.CHARACTER_HEIGHT;
+            tryChangePosition(this.getX(), newPositionY);
+        } else {
+            if(getAbilityTimeouts().get("teleport")==0) {
+                newPositionY = (Constants.WINDOW_HEIGHT - Constants.CHARACTER_HEIGHT - 40);
+                getAbilityTimeouts().replace("teleport", teleportCooldown);
+                resetTimeout("teleport", teleportCooldown);
+                tryChangePosition(this.getX(), newPositionY);
+            }
+            else{
+                newPositionY = this.getY() >= Constants.CHARACTER_HEIGHT ?  this.getY() - Constants.CHARACTER_HEIGHT : 0;
+                tryChangePosition(this.getX(), newPositionY);
+            }
+        }
+    }
+    public void teleportDown() {
+
+        int newPositionY;
+        if(this.getY() < (Constants.WINDOW_HEIGHT - Constants.CHARACTER_HEIGHT - 40)){
+            newPositionY = this.getY() + Constants.CHARACTER_HEIGHT;
+            tryChangePosition(this.getX(), newPositionY);
+        } else {
+            if(getAbilityTimeouts().get("teleport")==0) {
+                newPositionY = 0;
+                getAbilityTimeouts().replace("teleport", teleportCooldown);
+                resetTimeout("teleport", teleportCooldown);
+                tryChangePosition(this.getX(), newPositionY);
+            }
+            else{
+                newPositionY = this.getY()+Constants.CHARACTER_HEIGHT+40 < (Constants.WINDOW_HEIGHT) ?  this.getY() + Constants.CHARACTER_HEIGHT : (Constants.WINDOW_HEIGHT-Constants.CHARACTER_HEIGHT-40);
+                tryChangePosition(this.getX(), newPositionY);
+            }
+        }
     }
 }

@@ -23,6 +23,9 @@ public class AbilityPanel extends JPanel {
         else if(ability.equals("attack")){
             abilityIcon = getResizedImage("/icons/sword-icon.png");
         }
+        else if(ability.equals("teleport")){
+            abilityIcon = getResizedImage("/icons/teleport-icon.png");
+        }
 
         timeLabel = new JLabel(String.valueOf(player.getAbilityTimeouts().get(ability)));
         abilityIconLabel = new JLabel(abilityIcon);
