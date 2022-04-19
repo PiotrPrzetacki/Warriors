@@ -33,7 +33,10 @@ public abstract class CharacterClass implements BaseClass {
     private int attackCooldown;
     private int attackDistance;
     private Timer fireTimer;
+    private boolean showBlood;
     private HashMap<String, Integer> abilityTimeouts;
+
+    public static Image bloodImage = new ImageIcon(load("/images/characters/effects/blood.gif")).getImage();
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -163,21 +166,40 @@ public abstract class CharacterClass implements BaseClass {
 
 
     public void attack(int direction, CharacterClass[] players) {
-        System.out.println(attackCooldown);
         abilityTimeouts.replace("attack", attackCooldown);
         resetTimeout("attack", attackCooldown);
         if(direction==0){
             for(int i=0; i<attackDistance; i++){
                 if(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
-                    players[CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1].reduceHealth(this.attackAmount);
-                    break;
+                    CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1];
+                    attackedPlayer.reduceHealth(this.attackAmount);
+                    attackedPlayer.setShowBlood(true);
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    attackedPlayer.setShowBlood(false);
+                                }
+                            }, 300
+                    );
+
                 }
             }
         }
         else if(direction==1){
             for(int i=0; i<attackDistance; i++){
                 if(CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
-                    players[CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1].reduceHealth(this.attackAmount);
+                    CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1];
+                    attackedPlayer.reduceHealth(this.attackAmount);
+                    attackedPlayer.setShowBlood(true);
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    attackedPlayer.setShowBlood(false);
+                                }
+                            }, 300
+                    );
                     break;
                 }
             }
@@ -188,10 +210,10 @@ public abstract class CharacterClass implements BaseClass {
         new SwingWorker<Void, Void>(){
             @Override
             protected Void doInBackground() throws InterruptedException {
-                int interval = 50;
-                for(int i=cooldown; i>=0; i-=interval){
-                    abilityTimeouts.replace(ability, i);
-                    Thread.sleep(interval-2);
+                int interval = 20;
+                for(int i=cooldown; i>=-100; i-=interval){
+                    abilityTimeouts.replace(ability, Math.max(i, 0));
+                    Thread.sleep(interval-1);
                 }
                 return null;
             }
@@ -459,5 +481,13 @@ public abstract class CharacterClass implements BaseClass {
 
     public void setAttackCooldown(int milliseconds) {
         this.attackCooldown = milliseconds;
+    }
+
+    public boolean isShowBlood() {
+        return showBlood;
+    }
+
+    public void setShowBlood(boolean showBlood) {
+        this.showBlood = showBlood;
     }
 }

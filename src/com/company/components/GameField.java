@@ -66,6 +66,9 @@ public class GameField extends JPanel {
         for (CharacterClass player : players) {
             g.drawImage(player.getImage(), player.getX(), player.getY(), this);
             g.drawString(player.getName(), player.getX(), player.getY()+12);
+            if(player.isShowBlood()){
+                g.drawImage(CharacterClass.bloodImage, player.getX()-24, player.getY()-15, this);
+            }
         }
         for (int i=0; i<CharacterClass.occupiedCells.length; i++){
             for (int j=0; j<CharacterClass.occupiedCells[0].length; j++){
@@ -82,6 +85,11 @@ public class GameField extends JPanel {
                         g.drawString(player.getName(), player.getX(), player.getY()+12);
                     }
                 }
+            }
+        }
+        for (CharacterClass player : players) {
+            if(player.isShowBlood()){
+                g.drawImage(CharacterClass.bloodImage, player.getX()-24, player.getY()-15, this);
             }
         }
     }

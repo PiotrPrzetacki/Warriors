@@ -6,11 +6,11 @@ import com.company.classes.CharacterClass;
 public class Archer  extends CharacterClass {
     public Archer(String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
         super(name, x, y, leftKey, rightKey, upKey, downKey, leftAttackKey, rightAttackKey);
-        this.setAttackAmount(50);
+        this.setAttackAmount(80);
         this.setMaxHealthPoints(1000);
-        this.setHealthPoints(500);
-        this.setAttackCooldown(500);
-        this.setMoveCooldown(200);
+        this.setHealthPoints(1000);
+        this.setAttackCooldown(250);
+        this.setMoveCooldown(210);
         this.className = "Archer";
         this.setAttackDistance(2);
         this.uploadImage("/images/characters/ArcherBaseImage.png",
