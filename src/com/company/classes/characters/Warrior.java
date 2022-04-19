@@ -1,6 +1,5 @@
 package com.company.classes.characters;
 
-import com.company.Constants;
 import com.company.classes.AttackType;
 import com.company.classes.CharacterClass;
 
@@ -16,9 +15,9 @@ public class Warrior extends CharacterClass {
         this.setMoveCooldown(140);
         this.setAttackType(AttackType.PHYSICAL);
         this.setName(name);
-        this.uploadImage("/images/characters/WarriorBaseImage.png",
-                "/images/characters/WarriorAttackLeftImage.png",
-                "/images/characters/WarriorAttackRightImage.png");
+        this.uploadImage("/images/characters/warrior/WarriorBaseImage.png",
+                "/images/characters/warrior/WarriorAttackLeftImage.png",
+                "/images/characters/warrior/WarriorAttackRightImage.png");
     }
 
 }

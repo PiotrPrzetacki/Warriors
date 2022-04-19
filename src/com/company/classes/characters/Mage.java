@@ -1,7 +1,6 @@
 package com.company.classes.characters;
 
 import com.company.Constants;
-import com.company.classes.AttackType;
 import com.company.classes.CharacterClass;
 
 public class Mage  extends CharacterClass {
@@ -15,9 +14,9 @@ public class Mage  extends CharacterClass {
         this.setMoveCooldown(160);
         this.className = "Mage";
         this.setAttackDistance(3);
-        this.uploadImage("/images/characters/MageBase.png",
-                "/images/characters/MageAttackLeft.png",
-                "/images/characters/MageAttackRight.png");
+        this.uploadImage("/images/characters/mage/MageBase.png",
+                "/images/characters/mage/MageAttackLeft.png",
+                "/images/characters/mage/MageAttackRight.png");
     }
     public void left() {
         int newPositionX = this.getX() > Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : 0;

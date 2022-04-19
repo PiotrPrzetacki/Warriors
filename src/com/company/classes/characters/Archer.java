@@ -1,6 +1,5 @@
 package com.company.classes.characters;
 
-import com.company.Constants;
 import com.company.classes.CharacterClass;
 
 public class Archer  extends CharacterClass {
@@ -14,9 +13,9 @@ public class Archer  extends CharacterClass {
         this.teleportCooldown = 6000;
         this.className = "Archer";
         this.setAttackDistance(2);
-        this.uploadImage("/images/characters/ArcherBaseImage.png",
-                "/images/characters/ArcherAttackLeftImage.png",
-                "/images/characters/ArcherAttackRightImage.png");
+        this.uploadImage("/images/characters/archer/ArcherBaseImage.png",
+                "/images/characters/archer/ArcherAttackLeftImage.png",
+                "/images/characters/archer/ArcherAttackRightImage.png");
 
         getAbilityTimeouts().put("teleport", 0);
 
