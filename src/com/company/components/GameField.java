@@ -8,7 +8,6 @@ import com.company.classes.arenas.Arena;
 import com.company.components.controls.PausePanel;
 import com.company.components.controls.StartGameMenu;
 import com.company.components.layouts.PlayersStats;
-import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,7 +53,6 @@ public class GameField extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         playersStats.refresh();
-        System.out.println(players[0].getAbilityTimeouts().get("attack"));
         if(pauseState) {
             checkGameOver();
             startGameMenu.getStartGameWorker().resume();

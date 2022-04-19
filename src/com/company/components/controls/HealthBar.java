@@ -13,8 +13,8 @@ public class HealthBar extends JProgressBar {
         setValue(player.getHealthPoints());
         setForeground(new Color(0xBE1111));
         setFont(Constants.paragraphFont);
-        setPreferredSize(new Dimension(250, 22));
-        setMaximumSize(new Dimension(250, 22));
+        setPreferredSize(new Dimension(220, 20));
+        setMaximumSize(new Dimension(220, 20));
         setStringPainted(true);
         setString(player.getHealthPoints() + "/" + player.getMaxHealthPoints() + " HP");
     }

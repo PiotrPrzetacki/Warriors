@@ -4,29 +4,35 @@ import com.company.classes.CharacterClass;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerInfoPanel extends JPanel {
 
-    private final HealthBar healthBar;
-    private JLabel playerNameLabel;
+    private final HealthPanel healthPanel;
+    private List<AbilityPanel> abilityPanels;
 
     public PlayerInfoPanel(CharacterClass player){
-        this.healthBar = new HealthBar(player);
-        this.playerNameLabel = new JLabel(player.getName());
+        this.healthPanel = new HealthPanel(player);
 
-        setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        c.anchor = GridBagConstraints.LINE_START;
-        add(playerNameLabel, c);
+        abilityPanels = new ArrayList<>();
+        abilityPanels.add(new AbilityPanel("move", player));
+        abilityPanels.add(new AbilityPanel("attack", player));
 
-        c.gridx = 0;
-        c.gridy = 1;
-        add(healthBar, c);
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        add(healthPanel);
+
+        for (AbilityPanel abilityPanel : abilityPanels){
+            add(Box.createRigidArea(new Dimension(5, 0)));
+            add(abilityPanel);
+        }
     }
 
-    public HealthBar getHealthBar() {
-        return healthBar;
+    public HealthPanel getHealthPanel() {
+        return healthPanel;
+    }
+
+    public List<AbilityPanel> getAbilityPanels() {
+        return abilityPanels;
     }
 }

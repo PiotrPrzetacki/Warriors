@@ -11,7 +11,7 @@ public class Mage  extends CharacterClass {
         this.setAttackAmount(50);
         this.setMaxHealthPoints(1000);
         this.setHealthPoints(500);
-        this.setAttackCooldown(1000);
+        this.setAttackCooldown(5000);
         this.setMoveCooldown(200);
         this.className = "Mage";
         this.setAttackDistance(3);
