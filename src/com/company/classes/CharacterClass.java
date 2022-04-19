@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import static com.company.utils.ResourceLoader.load;
 
@@ -27,9 +28,12 @@ public abstract class CharacterClass implements BaseClass {
     protected String className;
     private Arena arena;
     private boolean canMove;
+    private int moveCooldown;
     private boolean canAttack;
+    private int attackCooldown;
     private int attackDistance;
     private Timer fireTimer;
+    private HashMap<String, Integer> abilityTimeouts;
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -46,6 +50,10 @@ public abstract class CharacterClass implements BaseClass {
         this.rightAttackKey = rightAttackKey;
         this.canMove = true;
         this.canAttack = true;
+
+        abilityTimeouts = new HashMap<>();
+        abilityTimeouts.put("attack", 0);
+        abilityTimeouts.put("move", 0);
     }
 
     public CharacterClass(String name){
@@ -155,6 +163,9 @@ public abstract class CharacterClass implements BaseClass {
 
 
     public void attack(int direction, CharacterClass[] players) {
+        System.out.println(attackCooldown);
+        abilityTimeouts.replace("attack", attackCooldown);
+        resetTimeout("attack", attackCooldown);
         if(direction==0){
             for(int i=0; i<attackDistance; i++){
                 if(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
@@ -171,6 +182,20 @@ public abstract class CharacterClass implements BaseClass {
                 }
             }
         }
+    }
+
+    private void resetTimeout(String ability, int cooldown) {
+        new SwingWorker<Void, Void>(){
+            @Override
+            protected Void doInBackground() throws InterruptedException {
+                int interval = 50;
+                for(int i=cooldown; i>=0; i-=interval){
+                    abilityTimeouts.replace(ability, i);
+                    Thread.sleep(interval-2);
+                }
+                return null;
+            }
+        }.execute();
     }
 
     public boolean getCanAttack() {
@@ -294,6 +319,8 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void tryChangePosition(int newPositionX, int newPositionY, boolean takeDamage) {
+        abilityTimeouts.replace("move", moveCooldown);
+        resetTimeout("move", moveCooldown);
         if (occupiedCells[newPositionX][newPositionY] == 0) {
             if (arena.getSpecialSquares()[newPositionX][newPositionY] != -3) {
                 occupiedCells[this.x][this.y] = 0;
@@ -408,5 +435,29 @@ public abstract class CharacterClass implements BaseClass {
             else if(oldX-newX > 0) return new int[]{0, -1};
             else return new int[]{0, 0};
         }
+    }
+
+    public HashMap<String, Integer> getAbilityTimeouts() {
+        return abilityTimeouts;
+    }
+
+    public void setAbilityTimeouts(HashMap<String, Integer> abilityTimeouts) {
+        this.abilityTimeouts = abilityTimeouts;
+    }
+
+    public int getMoveCooldown() {
+        return moveCooldown;
+    }
+
+    public int getAttackCooldown() {
+        return attackCooldown;
+    }
+
+    public void setMoveCooldown(int milliseconds) {
+        this.moveCooldown = milliseconds;
+    }
+
+    public void setAttackCooldown(int milliseconds) {
+        this.attackCooldown = milliseconds;
     }
 }

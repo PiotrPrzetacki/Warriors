@@ -12,6 +12,8 @@ public class Warrior extends CharacterClass {
         this.setHealthPoints(1000);
         this.className = "Warior";
         this.setAttackDistance(1);
+        this.setAttackCooldown(500);
+        this.setMoveCooldown(200);
         this.setAttackType(AttackType.PHYSICAL);
         this.setName(name);
         this.uploadImage("/images/characters/WarriorBaseImage.png",

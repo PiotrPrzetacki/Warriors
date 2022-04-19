@@ -54,7 +54,7 @@ public class GameField extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         playersStats.refresh();
-
+        System.out.println(players[0].getAbilityTimeouts().get("attack"));
         if(pauseState) {
             checkGameOver();
             startGameMenu.getStartGameWorker().resume();
@@ -95,7 +95,7 @@ public class GameField extends JPanel {
             super.keyPressed(e);
             int key = e.getKeyCode();
             for (CharacterClass player : players) {
-                if(player.getCanMove()) {
+                if(player.getCanMove() && player.getAbilityTimeouts().get("move")==0) {
                     if (key == player.getLeftKey()) {
                         player.left();
                     }
@@ -109,7 +109,7 @@ public class GameField extends JPanel {
                         player.down();
                     }
                 }
-                if(player.getCanAttack()) {
+                if(player.getCanAttack() && player.getAbilityTimeouts().get("attack")==0) {
                     Timer timer = new Timer(150, e1 -> {
                         player.setBaseImage();
                         repaint();
