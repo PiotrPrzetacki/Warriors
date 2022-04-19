@@ -2,6 +2,7 @@ package com.company.components.controls;
 
 import com.company.classes.CharacterClass;
 import com.company.classes.characters.Archer;
+import com.company.classes.characters.Healer;
 import com.company.classes.characters.Mage;
 import com.company.classes.characters.Warrior;
 
@@ -78,9 +79,10 @@ public class PlayerSelectionStackPanel extends StackPanel {
         Map<String, String> data = new HashMap<>();
         data.put("className", characterClassName);
         switch (characterClassName) {
-            case "Warrior" -> data.put("imageURL", "/images/characters/WarriorResizedBaseImage.png");
-            case "Archer" -> data.put("imageURL", "/images/characters/ArcherResizedBaseImage.png");
-            case "Mage" -> data.put("imageURL", "/images/characters/MageResizedBaseImage.png");
+            case "Warrior" -> data.put("imageURL", "/images/characters/warrior/WarriorResizedBaseImage.png");
+            case "Archer" -> data.put("imageURL", "/images/characters/archer/ArcherResizedBaseImage.png");
+            case "Mage" -> data.put("imageURL", "/images/characters/mage/MageResizedBaseImage.png");
+            case "Healer" -> data.put("imageURL", "/images/characters/healer/HealerBaseResized.png");
         }
 
         return data;
@@ -103,6 +105,7 @@ public class PlayerSelectionStackPanel extends StackPanel {
         return switch (playerData.get("className")) {
             case "Archer" -> new Archer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
             case "Mage" -> new Mage(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+            case "Healer" -> new Healer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
             default -> new Warrior(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
         };
     }

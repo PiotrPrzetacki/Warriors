@@ -29,6 +29,7 @@ public class CharacterSelectionPanel extends JPanel {
         availableCharacters.add("Warrior");
         availableCharacters.add("Archer");
         availableCharacters.add("Mage");
+        availableCharacters.add("Healer");
 
         setLayout(new BorderLayout());
 
