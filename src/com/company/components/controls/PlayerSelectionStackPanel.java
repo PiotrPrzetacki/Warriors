@@ -79,10 +79,10 @@ public class PlayerSelectionStackPanel extends StackPanel {
         Map<String, String> data = new HashMap<>();
         data.put("className", characterClassName);
         switch (characterClassName) {
-            case "Warrior" -> data.put("imageURL", "/images/characters/warrior/WarriorResizedBaseImage.png");
-            case "Archer" -> data.put("imageURL", "/images/characters/archer/ArcherResizedBaseImage.png");
-            case "Mage" -> data.put("imageURL", "/images/characters/mage/MageResizedBaseImage.png");
-            case "Healer" -> data.put("imageURL", "/images/characters/healer/HealerBaseResized.png");
+            case "Warrior": data.put("imageURL", "/images/characters/warrior/WarriorResizedBaseImage.png"); break;
+            case "Archer": data.put("imageURL", "/images/characters/archer/ArcherResizedBaseImage.png"); break;
+            case "Mage": data.put("imageURL", "/images/characters/mage/MageResizedBaseImage.png"); break;
+            case "Healer": data.put("imageURL", "/images/characters/healer/HealerBaseResized.png"); break;
         }
 
         return data;
@@ -102,11 +102,11 @@ public class PlayerSelectionStackPanel extends StackPanel {
     }
 
     public CharacterClass getSelectedCharacter(){
-        return switch (playerData.get("className")) {
-            case "Archer" -> new Archer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-            case "Mage" -> new Mage(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-            case "Healer" -> new Healer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-            default -> new Warrior(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
-        };
+        switch (playerData.get("className")) {
+            case "Archer": return new Archer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+            case "Mage": return new Mage(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+            case "Healer": return new Healer(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+            default: return new Warrior(getPlayerNameTextField().getText(), 0, 0, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_Q, KeyEvent.VK_E);
+        }
     }
 }
