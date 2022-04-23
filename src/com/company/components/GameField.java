@@ -6,6 +6,7 @@ import com.company.Team;
 import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
 import com.company.classes.characters.Abilities;
+import com.company.classes.objects.FreeObject;
 import com.company.components.controls.PausePanel;
 import com.company.components.controls.StartGameMenu;
 import com.company.components.layouts.PlayersStats;
@@ -14,17 +15,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameField extends JPanel {
+    private boolean pauseState;
+    private boolean playersAbilitiesActivated;
+    private final boolean repaintLoopEnabled;
     private final Arena arena;
     private final CharacterClass[] players;
     private final PlayersStats playersStats;
     private final PausePanel pausePanel;
-    private final boolean repaintLoopEnabled;
-    private boolean pauseState;
-    private boolean playersAbilitiesActivated;
-    private StartGameMenu startGameMenu;
+    private final StartGameMenu startGameMenu;
+    private List<FreeObject> freeObjects;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
         this.players = team.getTeamMembers();
@@ -34,6 +37,7 @@ public class GameField extends JPanel {
         this.startGameMenu = new StartGameMenu(this);
         this.repaintLoopEnabled = true;
         this.pauseState = true;
+        this.freeObjects = new ArrayList<>();
 
         mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
         setLayout(new BorderLayout());
@@ -48,7 +52,7 @@ public class GameField extends JPanel {
         add(startGameMenu, BorderLayout.CENTER);
 
         setFocusable(true);
-        addKeyListener(new FieldKeyListener());
+        addKeyListener(new FieldKeyListener(this));
     }
 
     @Override
@@ -68,9 +72,6 @@ public class GameField extends JPanel {
         for (CharacterClass player : players) {
             g.drawImage(player.getImage(), player.getX(), player.getY(), this);
             g.drawString(player.getName(), player.getX(), player.getY()+12);
-            if(player.isShowBlood()){
-                g.drawImage(CharacterClass.bloodImage, player.getX()-24, player.getY()-15, this);
-            }
         }
         for (int i=0; i<CharacterClass.occupiedCells.length; i++){
             for (int j=0; j<CharacterClass.occupiedCells[0].length; j++){
@@ -89,14 +90,16 @@ public class GameField extends JPanel {
                 }
             }
         }
-        for (CharacterClass player : players) {
-            if(player.isShowBlood()){
-                g.drawImage(CharacterClass.bloodImage, player.getX()-24, player.getY()-15, this);
-            }
+        for(int i=0; i<freeObjects.size(); i++){
+            g.drawImage(freeObjects.get(i).getImageToDraw(), freeObjects.get(i).getX(), freeObjects.get(i).getY(), this);
         }
     }
 
     public class FieldKeyListener extends KeyAdapter {
+        private GameField gameField;
+        public FieldKeyListener(GameField gameField){
+            this.gameField = gameField;
+        }
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -128,14 +131,14 @@ public class GameField extends JPanel {
                         if (key == player.getLeftAttackKey()) {
                             player.setAttackLeftImage();
 
-                            player.attack(1, players);
+                            player.attack(-1, players, gameField);
                             timer.start();
 
                         }
                         if (key == player.getRightAttackKey()) {
                             player.setAttackRightImage();
 
-                            player.attack(0, players);
+                            player.attack(1, players, gameField);
 
                             timer.start();
                         }
@@ -215,5 +218,13 @@ public class GameField extends JPanel {
 
     public void setPlayersAbilitiesActivated(boolean activateState){
         playersAbilitiesActivated = activateState;
+    }
+
+    public List<FreeObject> getFreeObjects() {
+        return freeObjects;
+    }
+
+    public CharacterClass[] getPlayers() {
+        return players;
     }
 }

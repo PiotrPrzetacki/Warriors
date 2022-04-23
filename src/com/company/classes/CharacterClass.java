@@ -3,6 +3,8 @@ package com.company.classes;
 import com.company.Constants;
 import com.company.classes.arenas.Arena;
 import com.company.classes.characters.Abilities;
+import com.company.classes.objects.Blood;
+import com.company.components.GameField;
 import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
@@ -28,10 +30,7 @@ public abstract class CharacterClass implements BaseClass {
     private Arena arena;
     private int attackDistance;
     private Timer fireTimer;
-    private boolean showBlood;
     private HashMap<Abilities, int[]> abilityTimeouts;
-
-    public static Image bloodImage = new ImageIcon(load("/images/characters/effects/blood.gif")).getImage();
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -150,41 +149,24 @@ public abstract class CharacterClass implements BaseClass {
     }
 
 
-    public void attack(int direction, CharacterClass[] players) {
+    public void attack(int direction, CharacterClass[] players, GameField gameField) {
         resetAbilityTimeout(Abilities.ATTACK);
         reduceAbilityTimeout(Abilities.ATTACK);
-        if(direction==0){
+        if(direction==1){
             for(int i=0; i<attackDistance; i++){
                 if(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
                     CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1];
                     attackedPlayer.reduceHealth(this.attackAmount);
-                    attackedPlayer.setShowBlood(true);
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    attackedPlayer.setShowBlood(false);
-                                }
-                            }, 300
-                    );
-
+                    gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
                 }
             }
         }
-        else if(direction==1){
+        else if(direction==-1){
             for(int i=0; i<attackDistance; i++){
                 if(CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
                     CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1];
                     attackedPlayer.reduceHealth(this.attackAmount);
-                    attackedPlayer.setShowBlood(true);
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    attackedPlayer.setShowBlood(false);
-                                }
-                            }, 300
-                    );
+                    gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
                     break;
                 }
             }
@@ -453,14 +435,6 @@ public abstract class CharacterClass implements BaseClass {
 
     public HashMap<Abilities, int[]> getAbilityTimeouts() {
         return abilityTimeouts;
-    }
-
-    public boolean isShowBlood() {
-        return showBlood;
-    }
-
-    public void setShowBlood(boolean showBlood) {
-        this.showBlood = showBlood;
     }
 
     public void teleportLeft() {

@@ -1,6 +1,8 @@
 package com.company.classes.characters;
 
 import com.company.classes.CharacterClass;
+import com.company.classes.objects.Arrow;
+import com.company.components.GameField;
 
 public class Archer  extends CharacterClass {
     public Archer(String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
@@ -35,5 +37,13 @@ public class Archer  extends CharacterClass {
     @Override
     public void down() {
         teleportDown();
+    }
+
+    @Override
+    public void attack(int direction, CharacterClass[] players, GameField gameField){
+        //super.attack(direction, players, gameField);
+        resetAbilityTimeout(Abilities.ATTACK);
+        reduceAbilityTimeout(Abilities.ATTACK);
+        gameField.getFreeObjects().add(new Arrow(this, direction, gameField));
     }
 }
