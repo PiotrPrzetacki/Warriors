@@ -14,8 +14,7 @@ public class StartGameMenu extends JPanel {
     public StartGameMenu(GameField gameField){
 
         setBackground(new Color(0, 0, 0, 0));
-        gameField.setPlayersCanMove(false);
-        gameField.setPlayersCanAttack(false);
+        gameField.setPlayersAbilitiesActivated(false);
 
         setLayout(new BorderLayout());
         JLabel label = new JLabel(" 3 ");
@@ -38,8 +37,7 @@ public class StartGameMenu extends JPanel {
                     label.setText(" 1 ");
                     sleep(800);
                     label.setText("Fight!");
-                    gameField.setPlayersCanAttack(true);
-                    gameField.setPlayersCanMove(true);
+                    gameField.setPlayersAbilitiesActivated(true);
                     sleep(500);
                     remove(label);
                     gameField.remove(_this);

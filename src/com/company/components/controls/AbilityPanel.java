@@ -1,6 +1,7 @@
 package com.company.components.controls;
 
 import com.company.classes.CharacterClass;
+import com.company.classes.characters.Abilities;
 
 import javax.swing.*;
 
@@ -13,21 +14,21 @@ public class AbilityPanel extends JPanel {
     private ImageIcon abilityIcon;
     private JLabel abilityIconLabel;
     private JLabel timeLabel;
-    private String ability;
+    private Abilities ability;
 
-    public AbilityPanel(String ability, CharacterClass player){
+    public AbilityPanel(Abilities ability, CharacterClass player){
         this.ability = ability;
-        if(ability.equals("move")){
+        if(ability == Abilities.MOVE){
             abilityIcon = getResizedImage("/icons/boot-icon.png");
         }
-        else if(ability.equals("attack")){
+        else if(ability == Abilities.ATTACK){
             abilityIcon = getResizedImage("/icons/sword-icon.png");
         }
-        else if(ability.equals("teleport")){
+        else if(ability == Abilities.TELEPORT){
             abilityIcon = getResizedImage("/icons/teleport-icon.png");
         }
 
-        timeLabel = new JLabel(String.valueOf(player.getAbilityTimeouts().get(ability)));
+        timeLabel = new JLabel(String.valueOf(player.getAbilityTimeouts().get(ability)[0]));
         abilityIconLabel = new JLabel(abilityIcon);
         setMinimumSize(new Dimension(35, 40));
         setPreferredSize(new Dimension(35, 40));
@@ -52,7 +53,7 @@ public class AbilityPanel extends JPanel {
         return timeLabel;
     }
 
-    public String getAbility() {
+    public Abilities getAbility() {
         return ability;
     }
 }

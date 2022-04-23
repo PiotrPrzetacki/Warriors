@@ -17,8 +17,8 @@ public class PlayerInfoPanel extends JPanel {
         this.healthPanel = new HealthPanel(player);
 
         abilityPanels = new ArrayList<>();
-        player.getAbilityTimeouts().forEach((abilityName, currentCooldown) -> {
-            abilityPanels.add(new AbilityPanel(abilityName, player));
+        player.getAbilityTimeouts().forEach((ability, timeout) -> {
+            abilityPanels.add(new AbilityPanel(ability, player));
         });
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

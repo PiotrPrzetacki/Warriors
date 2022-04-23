@@ -5,6 +5,7 @@ import com.company.MainWindow;
 import com.company.Team;
 import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
+import com.company.classes.characters.Abilities;
 import com.company.components.controls.PausePanel;
 import com.company.components.controls.StartGameMenu;
 import com.company.components.layouts.PlayersStats;
@@ -22,13 +23,14 @@ public class GameField extends JPanel {
     private final PausePanel pausePanel;
     private final boolean repaintLoopEnabled;
     private boolean pauseState;
+    private boolean playersAbilitiesActivated;
     private StartGameMenu startGameMenu;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
         this.players = team.getTeamMembers();
         this.arena = arena;
         this.playersStats = new PlayersStats(players);
-        this.pausePanel = new PausePanel(mainWindow, "Game paused");
+        this.pausePanel = new PausePanel(mainWindow, "Game NOT paused");
         this.startGameMenu = new StartGameMenu(this);
         this.repaintLoopEnabled = true;
         this.pauseState = true;
@@ -55,12 +57,12 @@ public class GameField extends JPanel {
         playersStats.refresh();
         if(pauseState) {
             checkGameOver();
-            startGameMenu.getStartGameWorker().resume();
+            //startGameMenu.getStartGameWorker().resume();
         }
         else{
-            setPlayersCanAttack(false);
-            setPlayersCanMove(false);
-            startGameMenu.getStartGameWorker().pause();
+            //setPlayersCanAttack(false);
+            //setPlayersCanMove(false);
+            //startGameMenu.getStartGameWorker().pause();
         }
 
         for (CharacterClass player : players) {
@@ -100,41 +102,43 @@ public class GameField extends JPanel {
         public void keyPressed(KeyEvent e) {
             super.keyPressed(e);
             int key = e.getKeyCode();
-            for (CharacterClass player : players) {
-                if(player.getCanMove() && player.getAbilityTimeouts().get("move")==0) {
-                    if (key == player.getLeftKey()) {
-                        player.left();
+            if(playersAbilitiesActivated) {
+                for (CharacterClass player : players) {
+                    if (player.getAbilityTimeouts().get(Abilities.MOVE)[0] == 0) {
+                        if (key == player.getLeftKey()) {
+                            player.left();
+                        }
+                        if (key == player.getRightKey()) {
+                            player.right();
+                        }
+                        if (key == player.getUpKey()) {
+                            player.up();
+                        }
+                        if (key == player.getDownKey()) {
+                            player.down();
+                        }
                     }
-                    if (key == player.getRightKey()) {
-                        player.right();
-                    }
-                    if (key == player.getUpKey()) {
-                        player.up();
-                    }
-                    if (key == player.getDownKey()) {
-                        player.down();
-                    }
-                }
-                if(player.getCanAttack() && player.getAbilityTimeouts().get("attack")==0) {
-                    Timer timer = new Timer(150, e1 -> {
-                        player.setBaseImage();
-                        repaint();
-                    });
-                    timer.setRepeats(false);
+                    if (player.getAbilityTimeouts().get(Abilities.ATTACK)[0] == 0) {
+                        Timer timer = new Timer(150, e1 -> {
+                            player.setBaseImage();
+                            repaint();
+                        });
+                        timer.setRepeats(false);
 
-                    if (key == player.getLeftAttackKey()) {
-                        player.setAttackLeftImage();
+                        if (key == player.getLeftAttackKey()) {
+                            player.setAttackLeftImage();
 
-                        player.attack(1, players);
-                        timer.start();
+                            player.attack(1, players);
+                            timer.start();
 
-                    }
-                    if (key == player.getRightAttackKey()) {
-                        player.setAttackRightImage();
+                        }
+                        if (key == player.getRightAttackKey()) {
+                            player.setAttackRightImage();
 
-                        player.attack(0, players);
+                            player.attack(0, players);
 
-                        timer.start();
+                            timer.start();
+                        }
                     }
                 }
             }
@@ -149,6 +153,8 @@ public class GameField extends JPanel {
             repaint();
         }
     }
+
+
 
     private void setWalls(List<int[]> walls){
         for (int[] wall : walls) {
@@ -173,18 +179,6 @@ public class GameField extends JPanel {
         new Timer(20, e -> repaint()).start();
     }
 
-    public void setPlayersCanMove(boolean canMove){
-        for(CharacterClass player : players){
-            player.setCanMove(canMove);
-        }
-    }
-
-    public void setPlayersCanAttack(boolean canAttack){
-        for(CharacterClass player : players){
-            player.setCanAttack(canAttack);
-        }
-    }
-
     public Arena getArena() {
         return arena;
     }
@@ -192,16 +186,9 @@ public class GameField extends JPanel {
     private void pauseGame(boolean pauseState){
         pausePanel.refresh();
         if(pauseState) {
-            arena.resumeBackgroundWorkers();
-            setPlayersCanMove(true);
-            setPlayersCanAttack(true);
             remove(pausePanel);
-
         }
         else {
-            arena.pauseBackgroundWorkers();
-            setPlayersCanMove(false);
-            setPlayersCanAttack(false);
             add(pausePanel, BorderLayout.CENTER);
         }
         pausePanel.refresh();
@@ -224,5 +211,9 @@ public class GameField extends JPanel {
     public void closeGameField(){
         arena.closeArena();
         startGameMenu.getStartGameWorker().cancel(true);
+    }
+
+    public void setPlayersAbilitiesActivated(boolean activateState){
+        playersAbilitiesActivated = activateState;
     }
 }

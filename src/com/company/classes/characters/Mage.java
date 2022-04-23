@@ -10,8 +10,8 @@ public class Mage  extends CharacterClass {
         this.setAttackAmount(50);
         this.setMaxHealthPoints(1000);
         this.setHealthPoints(1000);
-        this.setAttackCooldown(2000);
-        this.setMoveCooldown(160);
+        this.setAbilityCooldown(Abilities.ATTACK, 2000);
+        this.setAbilityCooldown(Abilities.MOVE, 160);
         this.className = "Mage";
         this.setAttackDistance(3);
         this.uploadImage("/images/characters/mage/MageBase.png",

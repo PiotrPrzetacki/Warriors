@@ -8,16 +8,15 @@ public class Archer  extends CharacterClass {
         this.setAttackAmount(80);
         this.setMaxHealthPoints(1000);
         this.setHealthPoints(1000);
-        this.setAttackCooldown(250);
-        this.setMoveCooldown(210);
-        this.teleportCooldown = 6000;
+        this.setAbilityCooldown(Abilities.ATTACK, 250);
+        this.setAbilityCooldown(Abilities.MOVE, 210);
         this.className = "Archer";
         this.setAttackDistance(2);
         this.uploadImage("/images/characters/archer/ArcherBaseImage.png",
                 "/images/characters/archer/ArcherAttackLeftImage.png",
                 "/images/characters/archer/ArcherAttackRightImage.png");
 
-        getAbilityTimeouts().put("teleport", 0);
+        getAbilityTimeouts().put(Abilities.TELEPORT, new int[]{0, 6000});
 
     }
 

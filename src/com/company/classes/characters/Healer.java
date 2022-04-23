@@ -11,15 +11,14 @@ public class Healer  extends CharacterClass {
         this.setHealthPoints(1000);
         this.setAttackDistance(2);
         this.setName(name);
-        this.setAttackCooldown(235);
-        this.setMoveCooldown(200);
-        this.teleportCooldown = 5000;
+        this.setAbilityCooldown(Abilities.ATTACK, 235);
+        this.setAbilityCooldown(Abilities.MOVE, 200);
         this.setAttackDistance(2);
         this.uploadImage("/images/characters/healer/HealerBase.png",
                 "/images/characters/healer/HealerAttackLeft.png",
                 "/images/characters/healer/HealerAttackRight.png");
 
-        getAbilityTimeouts().put("teleport", 0);
+        getAbilityTimeouts().put(Abilities.TELEPORT, new int[]{0, 5000});
     }
     @Override
     public void left() {

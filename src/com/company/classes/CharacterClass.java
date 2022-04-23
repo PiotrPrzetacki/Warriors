@@ -2,12 +2,11 @@ package com.company.classes;
 
 import com.company.Constants;
 import com.company.classes.arenas.Arena;
-import com.company.components.GameField;
+import com.company.classes.characters.Abilities;
+import com.company.utils.PausableSwingWorker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import static com.company.utils.ResourceLoader.load;
@@ -27,20 +26,10 @@ public abstract class CharacterClass implements BaseClass {
     private int leftKey, rightKey, upKey, downKey, leftAttackKey,rightAttackKey;
     protected String className;
     private Arena arena;
-
-    private boolean canMove;
-    private int moveCooldown;
-
-    private boolean canAttack;
-    private int attackCooldown;
-
-    protected boolean canTeleport;
-    protected int teleportCooldown;
-
     private int attackDistance;
     private Timer fireTimer;
     private boolean showBlood;
-    private HashMap<String, Integer> abilityTimeouts;
+    private HashMap<Abilities, int[]> abilityTimeouts;
 
     public static Image bloodImage = new ImageIcon(load("/images/characters/effects/blood.gif")).getImage();
 
@@ -57,12 +46,10 @@ public abstract class CharacterClass implements BaseClass {
         this.downKey = downKey;
         this.leftAttackKey = leftAttackKey;
         this.rightAttackKey = rightAttackKey;
-        this.canMove = true;
-        this.canAttack = true;
 
         abilityTimeouts = new HashMap<>();
-        abilityTimeouts.put("attack", 0);
-        abilityTimeouts.put("move", 0);
+        abilityTimeouts.put(Abilities.ATTACK, new int[]{0, 200});
+        abilityTimeouts.put(Abilities.MOVE, new int[]{0, 200});
     }
 
     public CharacterClass(String name){
@@ -114,10 +101,6 @@ public abstract class CharacterClass implements BaseClass {
         this.arena = arena;
     }
 
-    public void setCanMove(boolean canMove) {
-        this.canMove = canMove;
-    }
-
     public void setAttackType(AttackType attackType) {
         this.attackType = attackType;
     }
@@ -140,10 +123,6 @@ public abstract class CharacterClass implements BaseClass {
 
     public int getHealthPoints() {
         return healthPoints;
-    }
-
-    public void setCanAttack(boolean canAttack) {
-        this.canAttack = canAttack;
     }
 
     public int getLevel() {
@@ -172,8 +151,8 @@ public abstract class CharacterClass implements BaseClass {
 
 
     public void attack(int direction, CharacterClass[] players) {
-        abilityTimeouts.replace("attack", attackCooldown);
-        resetTimeout("attack", attackCooldown);
+        resetAbilityTimeout(Abilities.ATTACK);
+        reduceAbilityTimeout(Abilities.ATTACK);
         if(direction==0){
             for(int i=0; i<attackDistance; i++){
                 if(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
@@ -212,22 +191,24 @@ public abstract class CharacterClass implements BaseClass {
         }
     }
 
-    protected void resetTimeout(String ability, int cooldown) {
-        new SwingWorker<Void, Void>(){
+    protected void reduceAbilityTimeout(Abilities ability) {
+        new PausableSwingWorker<Void, Void>(){
             @Override
             protected Void doInBackground() throws InterruptedException {
+
                 int interval = 20;
-                for(int i=cooldown; i>=-100; i-=interval){
-                    abilityTimeouts.replace(ability, Math.max(i, 0));
-                    Thread.sleep(interval-1);
+                for(int i=abilityTimeouts.get(ability)[1]; i>=-100; i-=interval) {
+                    abilityTimeouts.get(ability)[0] = Math.max(i, 0);
+                    Thread.sleep(interval - 1);
                 }
                 return null;
             }
         }.execute();
     }
-
-    public boolean getCanAttack() {
-        return canAttack;
+    protected void resetAbilityTimeout(Abilities ability){
+        if(abilityTimeouts.containsKey(ability)) {
+            abilityTimeouts.get(ability)[0] = abilityTimeouts.get(ability)[1];
+        }
     }
 
     @Override
@@ -294,10 +275,6 @@ public abstract class CharacterClass implements BaseClass {
         setBaseImage();
     }
 
-    public boolean getCanMove() {
-        return canMove;
-    }
-
     public void setBaseImage() {
         this.image = this.baseImage;
     }
@@ -347,8 +324,8 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void tryChangePosition(int newPositionX, int newPositionY, boolean takeDamage) {
-        abilityTimeouts.replace("move", moveCooldown);
-        resetTimeout("move", moveCooldown);
+        resetAbilityTimeout(Abilities.MOVE);
+        reduceAbilityTimeout(Abilities.MOVE);
         if (occupiedCells[newPositionX][newPositionY] == 0) {
             if (arena.getSpecialSquares()[newPositionX][newPositionY] != -3) {
                 occupiedCells[this.x][this.y] = 0;
@@ -363,7 +340,7 @@ public abstract class CharacterClass implements BaseClass {
                     this.x = newPositionX;
                     this.y = newPositionY;
                     int newX = newPositionX + (Constants.CHARACTER_WIDTH * direction[1]);
-                    canMove = false;
+                    abilityTimeouts.get(Abilities.MOVE)[0] = 1;
                     new java.util.Timer().schedule(
                             new java.util.TimerTask() {
                                 @Override
@@ -371,7 +348,7 @@ public abstract class CharacterClass implements BaseClass {
                                     if (newX >= 0 && newX <= CharacterClass.occupiedCells[0].length) {
                                         tryChangePosition(newX, y);
                                     }
-                                    canMove = true;
+                                    abilityTimeouts.get(Abilities.MOVE)[0] = 0;
                                 }
                             }, 200
                     );
@@ -380,7 +357,7 @@ public abstract class CharacterClass implements BaseClass {
                     this.x = newPositionX;
                     this.y = newPositionY;
                     int newY = newPositionY + (Constants.CHARACTER_HEIGHT * direction[1]);
-                    canMove = false;
+                    abilityTimeouts.get(Abilities.MOVE)[0] = 1000;
                     new java.util.Timer().schedule(
                             new java.util.TimerTask() {
                                 @Override
@@ -388,7 +365,7 @@ public abstract class CharacterClass implements BaseClass {
                                     if (newY >= 0 && newY <= CharacterClass.occupiedCells.length) {
                                         tryChangePosition(x, newY);
                                     }
-                                    canMove = true;
+                                    abilityTimeouts.get(Abilities.MOVE)[0] = 0;
                                 }
                             }, 200
                     );
@@ -474,28 +451,8 @@ public abstract class CharacterClass implements BaseClass {
         }
     }
 
-    public HashMap<String, Integer> getAbilityTimeouts() {
+    public HashMap<Abilities, int[]> getAbilityTimeouts() {
         return abilityTimeouts;
-    }
-
-    public void setAbilityTimeouts(HashMap<String, Integer> abilityTimeouts) {
-        this.abilityTimeouts = abilityTimeouts;
-    }
-
-    public int getMoveCooldown() {
-        return moveCooldown;
-    }
-
-    public int getAttackCooldown() {
-        return attackCooldown;
-    }
-
-    public void setMoveCooldown(int milliseconds) {
-        this.moveCooldown = milliseconds;
-    }
-
-    public void setAttackCooldown(int milliseconds) {
-        this.attackCooldown = milliseconds;
     }
 
     public boolean isShowBlood() {
@@ -512,10 +469,10 @@ public abstract class CharacterClass implements BaseClass {
             newPositionX = this.getX() - Constants.CHARACTER_WIDTH;
             tryChangePosition(newPositionX, this.getY());
         } else {
-            if(getAbilityTimeouts().get("teleport")==0) {
+            if(getAbilityTimeouts().get(Abilities.TELEPORT)[0] == 0) {
                 newPositionX = Constants.WINDOW_WIDTH - Constants.CHARACTER_WIDTH;
-                getAbilityTimeouts().replace("teleport", teleportCooldown);
-                resetTimeout("teleport", teleportCooldown);
+                resetAbilityTimeout(Abilities.TELEPORT);
+                reduceAbilityTimeout(Abilities.TELEPORT);
                 tryChangePosition(newPositionX, this.getY());
             }
             else{
@@ -531,10 +488,10 @@ public abstract class CharacterClass implements BaseClass {
             newPositionX = this.getX() + Constants.CHARACTER_WIDTH;
             tryChangePosition(newPositionX, this.getY());
         } else {
-            if(getAbilityTimeouts().get("teleport")==0) {
+            if(getAbilityTimeouts().get(Abilities.TELEPORT)[0] == 0) {
                 newPositionX = 0;
-                getAbilityTimeouts().replace("teleport", teleportCooldown);
-                resetTimeout("teleport", teleportCooldown);
+                resetAbilityTimeout(Abilities.TELEPORT);
+                reduceAbilityTimeout(Abilities.TELEPORT);
                 tryChangePosition(newPositionX, this.getY());
             }
             else{
@@ -550,10 +507,10 @@ public abstract class CharacterClass implements BaseClass {
             newPositionY = this.getY() - Constants.CHARACTER_HEIGHT;
             tryChangePosition(this.getX(), newPositionY);
         } else {
-            if(getAbilityTimeouts().get("teleport")==0) {
+            if(getAbilityTimeouts().get(Abilities.TELEPORT)[0] == 0) {
                 newPositionY = (Constants.WINDOW_HEIGHT - Constants.CHARACTER_HEIGHT - 40);
-                getAbilityTimeouts().replace("teleport", teleportCooldown);
-                resetTimeout("teleport", teleportCooldown);
+                resetAbilityTimeout(Abilities.TELEPORT);
+                reduceAbilityTimeout(Abilities.TELEPORT);
                 tryChangePosition(this.getX(), newPositionY);
             }
             else{
@@ -569,16 +526,22 @@ public abstract class CharacterClass implements BaseClass {
             newPositionY = this.getY() + Constants.CHARACTER_HEIGHT;
             tryChangePosition(this.getX(), newPositionY);
         } else {
-            if(getAbilityTimeouts().get("teleport")==0) {
+            if(getAbilityTimeouts().get(Abilities.TELEPORT)[0] == 0) {
                 newPositionY = 0;
-                getAbilityTimeouts().replace("teleport", teleportCooldown);
-                resetTimeout("teleport", teleportCooldown);
+                resetAbilityTimeout(Abilities.TELEPORT);
+                reduceAbilityTimeout(Abilities.TELEPORT);
                 tryChangePosition(this.getX(), newPositionY);
             }
             else{
                 newPositionY = this.getY()+Constants.CHARACTER_HEIGHT+40 < (Constants.WINDOW_HEIGHT) ?  this.getY() + Constants.CHARACTER_HEIGHT : (Constants.WINDOW_HEIGHT-Constants.CHARACTER_HEIGHT-40);
                 tryChangePosition(this.getX(), newPositionY);
             }
+        }
+    }
+
+    public void setAbilityCooldown(Abilities ability, int cooldown){
+        if(abilityTimeouts.containsKey(ability)) {
+            abilityTimeouts.get(ability)[1] = cooldown;
         }
     }
 }
