@@ -20,7 +20,7 @@ public class Warrior extends CharacterClass {
         this.uploadImage("/images/characters/warrior/WarriorBaseImage.png",
                 "/images/characters/warrior/WarriorAttackLeftImage.png",
                 "/images/characters/warrior/WarriorAttackRightImage.png");
-        this.getAbilityTimeouts().put(Abilities.THROW_FIREBALL, new int[]{0, 18_000});
+        this.getAbilityTimeouts().put(Abilities.THROW_FIREBALL, new int[]{0, 15_000});
     }
 
     @Override

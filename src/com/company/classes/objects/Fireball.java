@@ -5,7 +5,6 @@ import com.company.classes.CharacterClass;
 import com.company.components.GameField;
 
 import javax.swing.*;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,7 +13,6 @@ import static com.company.utils.ResourceLoader.load;
 public class Fireball extends FreeObject{
 
     private final int attackAmount = 180;
-    private final int speed = 8;
 
     public Fireball(int startX, int startY, int endX, int endY, GameField gameField, CharacterClass owner){
         this.x = startX;
@@ -23,9 +21,9 @@ public class Fireball extends FreeObject{
         double deg = Math.toDegrees(rad);
         this.imageToDraw = new ImageIcon(load(getPathToImage(deg))).getImage();
 
-        double[] v = new double[]{Math.cos(rad)*speed, Math.sin(rad)*speed};
+        int speed = 8;
+        double[] v = new double[]{Math.cos(rad)* speed, Math.sin(rad)* speed};
 
-        Fireball _this = this;
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -33,19 +31,20 @@ public class Fireball extends FreeObject{
                 x += (int) v[0];
                 y += (int) v[1];
 
-                if(isOutsideGamefield()){
-                    killFireball(gameField, timer);
+                if(isOutsideGameField()){
+                    cancel();
+                    killFireball(gameField, timer, this);
                 }
                 else {
 
                     int[] square = getSquare(x, y);
                     if (CharacterClass.occupiedCells[square[0]][square[1]] == -1) {
-                        killFireball(gameField, timer);
+                        killFireball(gameField, timer, this);
                     } else if (CharacterClass.occupiedCells[square[0]][square[1]] > 0 && CharacterClass.occupiedCells[square[0]][square[1]] != owner.getNumber()) {
                         CharacterClass attackedPlayer = gameField.getPlayers()[CharacterClass.occupiedCells[square[0]][square[1]] - 1];
                         attackedPlayer.reduceHealth(attackAmount);
                         gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
-                        killFireball(gameField, timer);
+                        killFireball(gameField, timer, this);
                     }
                 }
             }
@@ -53,8 +52,10 @@ public class Fireball extends FreeObject{
         timer.scheduleAtFixedRate(task, 0, 20);
     }
 
-    private void killFireball(GameField gameField, Timer timer){
+    private void killFireball(GameField gameField, Timer timer, TimerTask timerTask){
+        timerTask.cancel();
         gameField.getFreeObjects().remove(this);
+        timer.purge();
         timer.cancel();
     }
 
@@ -87,10 +88,7 @@ public class Fireball extends FreeObject{
         return res;
     }
 
-    private boolean isOutsideGamefield(){
-        if(x<=0 || x>=Constants.WINDOW_WIDTH || y<=0 || y>=Constants.WINDOW_HEIGHT){
-            return true;
-        }
-        else return false;
+    private boolean isOutsideGameField(){
+        return x <= 0 || x >= Constants.WINDOW_WIDTH || y <= 0 || y >= Constants.WINDOW_HEIGHT;
     }
 }
