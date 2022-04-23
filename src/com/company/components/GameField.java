@@ -6,6 +6,7 @@ import com.company.Team;
 import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
 import com.company.classes.characters.Abilities;
+import com.company.classes.objects.Fireball;
 import com.company.classes.objects.FreeObject;
 import com.company.components.controls.PausePanel;
 import com.company.components.controls.StartGameMenu;
@@ -85,7 +86,13 @@ public class GameField extends JPanel {
             }
         }
         for(int i=0; i<freeObjects.size(); i++){
-            g.drawImage(freeObjects.get(i).getImageToDraw(), freeObjects.get(i).getX(), freeObjects.get(i).getY(), this);
+            FreeObject obj = freeObjects.get(i);
+            if(obj instanceof Fireball){
+                g.drawImage(obj.getImageToDraw(), obj.getX()-obj.getImageToDraw().getWidth(null)/2,
+                         obj.getY()-obj.getImageToDraw().getHeight(null)/2, this);
+            } else {
+                g.drawImage(obj.getImageToDraw(), obj.getX(), obj.getY(), this);
+            }
         }
     }
 
@@ -138,7 +145,7 @@ public class GameField extends JPanel {
                         }
                     }
                     if(key == player.getSpecialAbilityKey()){
-                        player.useSpecialAbility();
+                        player.useSpecialAbility(gameField);
                     }
                 }
             }

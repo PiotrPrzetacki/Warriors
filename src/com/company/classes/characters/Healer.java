@@ -1,6 +1,7 @@
 package com.company.classes.characters;
 
 import com.company.classes.CharacterClass;
+import com.company.components.GameField;
 
 public class Healer  extends CharacterClass {
     public Healer(String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey, int specialAbilityKey) {
@@ -22,7 +23,7 @@ public class Healer  extends CharacterClass {
     }
 
     @Override
-    public void useSpecialAbility() {
+    public void useSpecialAbility(GameField gameField) {
 
     }
 

@@ -31,7 +31,7 @@ public class Archer  extends CharacterClass {
     }
 
     @Override
-    public void useSpecialAbility() {
+    public void useSpecialAbility(GameField gameField) {
         int[] specialAbility = getAbilityTimeouts().get(Abilities.LONG_SHOTS);
         if(specialAbility[0] == 0){
             specialAbility[0] = -1;

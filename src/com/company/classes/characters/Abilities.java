@@ -4,5 +4,6 @@ public enum Abilities {
     MOVE,
     ATTACK,
     TELEPORT,
-    LONG_SHOTS
+    LONG_SHOTS,
+    THROW_FIREBALL
 }

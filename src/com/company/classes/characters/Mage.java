@@ -2,6 +2,7 @@ package com.company.classes.characters;
 
 import com.company.Constants;
 import com.company.classes.CharacterClass;
+import com.company.components.GameField;
 
 public class Mage  extends CharacterClass {
 
@@ -20,7 +21,7 @@ public class Mage  extends CharacterClass {
     }
 
     @Override
-    public void useSpecialAbility() {
+    public void useSpecialAbility(GameField gameField) {
 
     }
 

@@ -56,7 +56,7 @@ public abstract class CharacterClass implements BaseClass {
         this.name = name;
     }
 
-    public abstract void useSpecialAbility();
+    public abstract void useSpecialAbility(GameField gameField);
 
     public void setCharacterData(int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey, int specialAbilityKey){
         this.x = x;
@@ -525,5 +525,9 @@ public abstract class CharacterClass implements BaseClass {
 
     public int getSpecialAbilityKey() {
         return specialAbilityKey;
+    }
+
+    public int getNumber() {
+        return number;
     }
 }

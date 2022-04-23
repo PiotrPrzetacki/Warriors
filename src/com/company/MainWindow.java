@@ -4,7 +4,6 @@ import com.company.classes.CharacterClass;
 import com.company.components.GameField;
 import com.company.components.GameSettings;
 import com.company.classes.arenas.Arena;
-
 import javax.swing.*;
 import java.awt.*;
 

@@ -30,6 +30,9 @@ public class AbilityPanel extends JPanel {
         else if(ability == Abilities.LONG_SHOTS){
             abilityIcon = getResizedImage("/icons/bow-icon.png");
         }
+        else if(ability == Abilities.THROW_FIREBALL){
+            abilityIcon = getResizedImage("/icons/fireball-icon.png");
+        }
 
         timeLabel = new JLabel(String.valueOf(player.getAbilityTimeouts().get(ability)[0]));
         abilityIconLabel = new JLabel(abilityIcon);
