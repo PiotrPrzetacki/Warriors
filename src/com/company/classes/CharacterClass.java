@@ -25,7 +25,7 @@ public abstract class CharacterClass implements BaseClass {
     private String name;
     private int maxHealthPoints;
     private int maxManaPoints;
-    private int leftKey, rightKey, upKey, downKey, leftAttackKey,rightAttackKey;
+    private int leftKey, rightKey, upKey, downKey, leftAttackKey,rightAttackKey, specialAbilityKey;
     protected String className;
     private Arena arena;
     private int attackDistance;
@@ -33,7 +33,7 @@ public abstract class CharacterClass implements BaseClass {
     private HashMap<Abilities, int[]> abilityTimeouts;
 
     public CharacterClass(
-            String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
+            String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey, int specialAbilityKey) {
         this.number = ++playerCount;
         occupiedCells[x][y] = this.number;
         this.name = name;
@@ -45,6 +45,7 @@ public abstract class CharacterClass implements BaseClass {
         this.downKey = downKey;
         this.leftAttackKey = leftAttackKey;
         this.rightAttackKey = rightAttackKey;
+        this.specialAbilityKey = specialAbilityKey;
 
         abilityTimeouts = new HashMap<>();
         abilityTimeouts.put(Abilities.ATTACK, new int[]{0, 200});
@@ -55,7 +56,9 @@ public abstract class CharacterClass implements BaseClass {
         this.name = name;
     }
 
-    public void setCharacterData(int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey){
+    public abstract void useSpecialAbility();
+
+    public void setCharacterData(int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey, int specialAbilityKey){
         this.x = x;
         this.y = y;
         this.leftKey = leftKey;
@@ -64,6 +67,7 @@ public abstract class CharacterClass implements BaseClass {
         this.downKey = downKey;
         this.leftAttackKey = leftAttackKey;
         this.rightAttackKey = rightAttackKey;
+        this.specialAbilityKey = specialAbilityKey;
     }
 
     public void setHealthPoints(int healthPoints) {
@@ -517,5 +521,9 @@ public abstract class CharacterClass implements BaseClass {
         if(abilityTimeouts.containsKey(ability)) {
             abilityTimeouts.get(ability)[1] = cooldown;
         }
+    }
+
+    public int getSpecialAbilityKey() {
+        return specialAbilityKey;
     }
 }

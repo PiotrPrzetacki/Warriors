@@ -12,9 +12,9 @@ import static com.company.utils.ResourceLoader.load;
 public class AbilityPanel extends JPanel {
 
     private ImageIcon abilityIcon;
-    private JLabel abilityIconLabel;
-    private JLabel timeLabel;
-    private Abilities ability;
+    private final JLabel abilityIconLabel;
+    private final JLabel timeLabel;
+    private final Abilities ability;
 
     public AbilityPanel(Abilities ability, CharacterClass player){
         this.ability = ability;
@@ -26,6 +26,9 @@ public class AbilityPanel extends JPanel {
         }
         else if(ability == Abilities.TELEPORT){
             abilityIcon = getResizedImage("/icons/teleport-icon.png");
+        }
+        else if(ability == Abilities.LONG_SHOTS){
+            abilityIcon = getResizedImage("/icons/bow-icon.png");
         }
 
         timeLabel = new JLabel(String.valueOf(player.getAbilityTimeouts().get(ability)[0]));

@@ -61,12 +61,6 @@ public class GameField extends JPanel {
         playersStats.refresh();
         if(pauseState) {
             checkGameOver();
-            //startGameMenu.getStartGameWorker().resume();
-        }
-        else{
-            //setPlayersCanAttack(false);
-            //setPlayersCanMove(false);
-            //startGameMenu.getStartGameWorker().pause();
         }
 
         for (CharacterClass player : players) {
@@ -142,6 +136,9 @@ public class GameField extends JPanel {
 
                             timer.start();
                         }
+                    }
+                    if(key == player.getSpecialAbilityKey()){
+                        player.useSpecialAbility();
                     }
                 }
             }

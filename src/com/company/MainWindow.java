@@ -41,6 +41,7 @@ public class MainWindow extends JFrame {
         arena.resetArena();
         for(CharacterClass player : team.getTeamMembers()){
             player.setHealthPoints(player.getMaxHealthPoints());
+            player.getAbilityTimeouts().forEach( (ability, timeout) -> timeout[0] = 0 );
         }
         this.gameField = new GameField(this, team, arena);
         add(gameField);

@@ -34,6 +34,8 @@ public class PlayersStats extends JPanel {
             playerInfoPanels[i].getHealthPanel().getHealthBar().setString(players[i].getHealthPoints() + "/" + players[i].getMaxHealthPoints() + " HP");
             for(AbilityPanel abilityPanel : playerInfoPanels[i].getAbilityPanels()){
                 abilityPanel.getTimeLabel().setText(convertAbilityTime(players[i].getAbilityTimeouts().get(abilityPanel.getAbility())[0]));
+                if(abilityPanel.getTimeLabel().getText().equals("ready")) abilityPanel.getTimeLabel().setForeground(new Color(0x0F5B04));
+                else abilityPanel.getTimeLabel().setForeground(Color.black);
             }
         }
     }

@@ -9,6 +9,11 @@ public class TimeConverter {
         else if(milliseconds<1000 && milliseconds>0){
             return String.format("%.1f", milliseconds/1000d) + "s";
         }
-        else return "ready";
+        else if(milliseconds == 0){
+            return "ready";
+        }
+        else{
+            return "active";
+        }
     }
 }

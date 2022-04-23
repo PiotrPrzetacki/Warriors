@@ -5,8 +5,8 @@ import com.company.classes.CharacterClass;
 
 public class Mage  extends CharacterClass {
 
-    public Mage(String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey) {
-        super(name, x, y, leftKey, rightKey, upKey, downKey, leftAttackKey, rightAttackKey);
+    public Mage(String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey, int specialAbilityKey) {
+        super(name, x, y, leftKey, rightKey, upKey, downKey, leftAttackKey, rightAttackKey, specialAbilityKey);
         this.setAttackAmount(50);
         this.setMaxHealthPoints(1000);
         this.setHealthPoints(1000);
@@ -18,6 +18,12 @@ public class Mage  extends CharacterClass {
                 "/images/characters/mage/MageAttackLeft.png",
                 "/images/characters/mage/MageAttackRight.png");
     }
+
+    @Override
+    public void useSpecialAbility() {
+
+    }
+
     public void left() {
         int newPositionX = this.getX() > Constants.CHARACTER_WIDTH ?  this.getX() - Constants.CHARACTER_WIDTH : 0;
         tryChangePosition(newPositionX, this.getY());
