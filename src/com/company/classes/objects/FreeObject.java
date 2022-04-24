@@ -1,5 +1,7 @@
 package com.company.classes.objects;
 
+import com.company.Constants;
+
 import java.awt.*;
 
 public abstract class FreeObject {
@@ -17,6 +19,10 @@ public abstract class FreeObject {
 
     public Image getImageToDraw() {
         return imageToDraw;
+    }
+
+    protected boolean isOutsideGameField(){
+        return x < 0 || x >= Constants.WINDOW_WIDTH || y < 0 || y >= Constants.WINDOW_HEIGHT;
     }
 }
 

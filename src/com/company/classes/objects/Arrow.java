@@ -4,8 +4,6 @@ import com.company.Constants;
 import com.company.classes.CharacterClass;
 import com.company.components.GameField;
 
-import java.util.List;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,9 +12,9 @@ import static com.company.utils.ResourceLoader.load;
 
 public class Arrow extends FreeObject{
 
-    private int distance;
+    private final int distance;
     private int distanceTravelled;
-    private int attackAmount;
+    private final int attackAmount;
 
     public Arrow(CharacterClass player, int direction, GameField gameField){
         int yOffset = 50;
@@ -33,14 +31,18 @@ public class Arrow extends FreeObject{
         timer.addActionListener(e -> {
             this.distanceTravelled++;
             this.x += Constants.CHARACTER_WIDTH*direction;
-            if(distanceTravelled>distance || CharacterClass.occupiedCells[x][y-yOffset] == -1) {
+            if(!isOutsideGameField()) {
+                if (distanceTravelled > distance || CharacterClass.occupiedCells[x][y - yOffset] == -1) {
+                    gameField.getFreeObjects().remove(this);
+                    timer.stop();
+                } else if (CharacterClass.occupiedCells[x][y - yOffset] > 0) {
+                    CharacterClass attackedPlayer = gameField.getPlayers()[CharacterClass.occupiedCells[x][y - yOffset] - 1];
+                    attackedPlayer.reduceHealth(attackAmount);
+                    gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
+                }
+            } else {
                 gameField.getFreeObjects().remove(this);
                 timer.stop();
-            }
-            else if(CharacterClass.occupiedCells[x][y-yOffset] > 0){
-                CharacterClass attackedPlayer = gameField.getPlayers()[CharacterClass.occupiedCells[x][y-yOffset]-1];
-                attackedPlayer.reduceHealth(attackAmount);
-                gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
             }
         });
         timer.start();

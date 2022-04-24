@@ -87,8 +87,4 @@ public class Fireball extends FreeObject{
         res[1] = y - (y % Constants.CHARACTER_HEIGHT);
         return res;
     }
-
-    private boolean isOutsideGameField(){
-        return x <= 0 || x >= Constants.WINDOW_WIDTH || y <= 0 || y >= Constants.WINDOW_HEIGHT;
-    }
 }
