@@ -7,6 +7,9 @@ import com.company.classes.objects.Blood;
 import com.company.components.GameField;
 import com.company.utils.PausableSwingWorker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ public abstract class CharacterClass implements BaseClass {
     private int attackDistance;
     private Timer fireTimer;
     private HashMap<Abilities, int[]> abilityTimeouts;
+    private List<SwingWorker> workers;
 
     public CharacterClass(
             String name, int x, int y, int leftKey, int rightKey, int upKey, int downKey, int leftAttackKey, int rightAttackKey, int specialAbilityKey) {
@@ -47,6 +51,7 @@ public abstract class CharacterClass implements BaseClass {
         this.rightAttackKey = rightAttackKey;
         this.specialAbilityKey = specialAbilityKey;
 
+        workers = new ArrayList<>();
         abilityTimeouts = new HashMap<>();
         abilityTimeouts.put(Abilities.ATTACK, new int[]{0, 200});
         abilityTimeouts.put(Abilities.MOVE, new int[]{0, 200});
@@ -178,7 +183,7 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     protected void reduceAbilityTimeout(Abilities ability) {
-        new PausableSwingWorker<Void, Void>(){
+        SwingWorker<Void, Void> worker = new PausableSwingWorker<Void, Void>(){
             @Override
             protected Void doInBackground() throws InterruptedException {
 
@@ -189,7 +194,9 @@ public abstract class CharacterClass implements BaseClass {
                 }
                 return null;
             }
-        }.execute();
+        };
+        workers.add(worker);
+        worker.execute();
     }
     protected void resetAbilityTimeout(Abilities ability){
         if(abilityTimeouts.containsKey(ability)) {
@@ -529,5 +536,9 @@ public abstract class CharacterClass implements BaseClass {
 
     public int getNumber() {
         return number;
+    }
+
+    public List<SwingWorker> getWorkers() {
+        return workers;
     }
 }
