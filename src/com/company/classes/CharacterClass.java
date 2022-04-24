@@ -317,10 +317,11 @@ public abstract class CharacterClass implements BaseClass {
     }
 
     public void tryChangePosition(int newPositionX, int newPositionY, boolean takeDamage) {
-        resetAbilityTimeout(Abilities.MOVE);
-        reduceAbilityTimeout(Abilities.MOVE);
+
         if (occupiedCells[newPositionX][newPositionY] == 0) {
             if (arena.getSpecialSquares()[newPositionX][newPositionY] != -3) {
+                resetAbilityTimeout(Abilities.MOVE);
+                reduceAbilityTimeout(Abilities.MOVE);
                 occupiedCells[this.x][this.y] = 0;
                 occupiedCells[newPositionX][newPositionY] = this.number;
                 this.x = newPositionX;
@@ -333,15 +334,15 @@ public abstract class CharacterClass implements BaseClass {
                     this.x = newPositionX;
                     this.y = newPositionY;
                     int newX = newPositionX + (Constants.CHARACTER_WIDTH * direction[1]);
-                    abilityTimeouts.get(Abilities.MOVE)[0] = 1;
+                    abilityTimeouts.get(Abilities.MOVE)[0] = 100;
                     new java.util.Timer().schedule(
                             new java.util.TimerTask() {
                                 @Override
                                 public void run() {
-                                    if (newX >= 0 && newX <= CharacterClass.occupiedCells[0].length) {
+                                    if (newX >= 0 && newX <= CharacterClass.occupiedCells.length) {
                                         tryChangePosition(newX, y);
                                     }
-                                    abilityTimeouts.get(Abilities.MOVE)[0] = 0;
+                                    abilityTimeouts.get(Abilities.MOVE)[0] = abilityTimeouts.get(Abilities.MOVE)[1];
                                 }
                             }, 200
                     );
@@ -350,15 +351,15 @@ public abstract class CharacterClass implements BaseClass {
                     this.x = newPositionX;
                     this.y = newPositionY;
                     int newY = newPositionY + (Constants.CHARACTER_HEIGHT * direction[1]);
-                    abilityTimeouts.get(Abilities.MOVE)[0] = 1000;
+                    abilityTimeouts.get(Abilities.MOVE)[0] = 100;
                     new java.util.Timer().schedule(
                             new java.util.TimerTask() {
                                 @Override
                                 public void run() {
-                                    if (newY >= 0 && newY <= CharacterClass.occupiedCells.length) {
+                                    if (newY >= 0 && newY <= CharacterClass.occupiedCells[0].length) {
                                         tryChangePosition(x, newY);
                                     }
-                                    abilityTimeouts.get(Abilities.MOVE)[0] = 0;
+                                    abilityTimeouts.get(Abilities.MOVE)[0] = abilityTimeouts.get(Abilities.MOVE)[1];
                                 }
                             }, 200
                     );
