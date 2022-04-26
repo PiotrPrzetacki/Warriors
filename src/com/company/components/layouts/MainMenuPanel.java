@@ -23,8 +23,7 @@ public class MainMenuPanel extends JPanel {
         this.setLayout(new BorderLayout());
 
         multiplayerBtn = new PrimaryButton("Multiplayer", 2);
-        singleplayerBtn = new PrimaryButton("Singleplayer", 2);
-        singleplayerBtn.setEnabled(false);
+        singleplayerBtn = new PrimaryButton("Monsters Attack", 2);
         quitBtn = new PrimaryButton("Quit", 2);
 
         multiplayerBtn.addActionListener(this::handleClick);

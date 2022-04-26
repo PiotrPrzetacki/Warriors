@@ -4,6 +4,8 @@ import com.company.classes.CharacterClass;
 import com.company.components.GameField;
 import com.company.components.GameSettings;
 import com.company.classes.arenas.Arena;
+import com.company.components.MonstersAttackGameField;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -33,18 +35,25 @@ public class MainWindow extends JFrame {
         try {
             remove(gameSettingsPanel);
             remove(gameField);
-        }catch(NullPointerException e){
-
+        }catch(NullPointerException ignored){}
+        if(gameField!=null) {
+            gameField.closeGameField();
+        }else{
+            CharacterClass.resetOccupiedCells();
+            arena.resetArena();
         }
-        CharacterClass.resetOccupiedCells();
-        arena.resetArena();
         for(CharacterClass player : team.getTeamMembers()){
             player.setHealthPoints(player.getMaxHealthPoints());
             player.getWorkers().forEach(worker -> worker.cancel(true));
             player.getWorkers().clear();
             player.getAbilityTimeouts().forEach( (ability, timeout) -> timeout[0] = 0 );
         }
-        this.gameField = new GameField(this, team, arena);
+        if(gameMode==2) {
+            this.gameField = new GameField(this, team, arena);
+        }
+        else if(gameMode==1){
+            this.gameField = new MonstersAttackGameField(this, team, arena);
+        }
         add(gameField);
         gameField.requestFocusInWindow();
         revalidate();
@@ -59,8 +68,7 @@ public class MainWindow extends JFrame {
 
         }
         gameField.closeGameField();
-        CharacterClass.resetOccupiedCells();
-        CharacterClass.setPlayerCount(CharacterClass.getPlayerCount()-2);
+        CharacterClass.setPlayerCount(0);
         gameSettingsPanel = new GameSettings(this);
         add(gameSettingsPanel);
         revalidate();

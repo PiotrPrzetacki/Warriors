@@ -36,9 +36,7 @@ public class Arrow extends FreeObject{
                     gameField.getFreeObjects().remove(this);
                     timer.stop();
                 } else if (CharacterClass.occupiedCells[x][y - yOffset] > 0) {
-                    CharacterClass attackedPlayer = gameField.getPlayers()[CharacterClass.occupiedCells[x][y - yOffset] - 1];
-                    attackedPlayer.reduceHealth(attackAmount);
-                    gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
+                    gameField.attack(CharacterClass.occupiedCells[x][y - yOffset], attackAmount);
                 }
             } else {
                 gameField.getFreeObjects().remove(this);

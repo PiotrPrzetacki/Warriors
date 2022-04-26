@@ -14,6 +14,7 @@ public class PauseMenu extends JPanel {
 
     private final JLabel titleLabel;
     private final MainWindow mainWindow;
+    private final JPanel infoPanel;
 
     public PauseMenu(MainWindow mainWindow, String text){
         this.mainWindow = mainWindow;
@@ -23,6 +24,9 @@ public class PauseMenu extends JPanel {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
         this.titleLabel = new HeaderLabel(text, 2);
+        this.infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
+        infoPanel.add(Box.createVerticalStrut(12));
         titleLabel.setFont(new Font(Constants.defaultFontFamily, Font.BOLD, 34));
         add(titleLabel, BorderLayout.NORTH);
         JPanel buttonsPanel = new JPanel();
@@ -42,6 +46,7 @@ public class PauseMenu extends JPanel {
         buttonsPanel.add(Box.createHorizontalGlue());
 
         add(buttonsPanel, BorderLayout.SOUTH);
+        add(infoPanel, BorderLayout.CENTER);
 
     }
 
@@ -50,7 +55,6 @@ public class PauseMenu extends JPanel {
     }
     private void handleRestartGame(ActionEvent e){
         mainWindow.getGameField().getArena().cancelBackgroundWorkers();
-        mainWindow.getGameField().closeGameField();
         mainWindow.startGame(mainWindow.getGameSettingsPanel().getGameMode(),
                              new Team(mainWindow.getGameSettingsPanel().getPlayers()),
                              mainWindow.getGameSettingsPanel().getArena());
@@ -66,5 +70,14 @@ public class PauseMenu extends JPanel {
 
     public void setTitleText(String text){
         titleLabel.setText(text);
+    }
+
+    public JPanel getInfoPanel() {
+        return infoPanel;
+    }
+
+    public void addWaveInfo(int wavesSurvived){
+        infoPanel.add(new HeaderLabel("You survived "+wavesSurvived+" waves", 4));
+        revalidate();
     }
 }

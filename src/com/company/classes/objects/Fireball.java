@@ -41,9 +41,7 @@ public class Fireball extends FreeObject{
                     if (CharacterClass.occupiedCells[square[0]][square[1]] == -1) {
                         killFireball(gameField, timer, this);
                     } else if (CharacterClass.occupiedCells[square[0]][square[1]] > 0 && CharacterClass.occupiedCells[square[0]][square[1]] != owner.getNumber()) {
-                        CharacterClass attackedPlayer = gameField.getPlayers()[CharacterClass.occupiedCells[square[0]][square[1]] - 1];
-                        attackedPlayer.reduceHealth(attackAmount);
-                        gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
+                        gameField.attack(CharacterClass.occupiedCells[square[0]][square[1]], attackAmount);
                         killFireball(gameField, timer, this);
                     }
                 }

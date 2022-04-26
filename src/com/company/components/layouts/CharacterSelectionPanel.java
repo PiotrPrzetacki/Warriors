@@ -76,8 +76,8 @@ public class CharacterSelectionPanel extends JPanel {
             }
 
         gameSettingsPanel.clearPlayers();
-        for (int i = 0; i< playerSelectionStackPanels.size(); i++){
-            gameSettingsPanel.addPlayer(playerSelectionStackPanels.get(i).getSelectedCharacter());
+        for (PlayerSelectionStackPanel playerPanel : playerSelectionStackPanels) {
+            gameSettingsPanel.addPlayer(playerPanel.getSelectedCharacter());
         }
         gameSettingsPanel.setArenaSelectionPanel();
     }

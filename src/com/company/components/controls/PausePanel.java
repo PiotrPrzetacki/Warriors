@@ -25,4 +25,8 @@ public class PausePanel extends JPanel {
     public void setPauseText(String text){
         pauseMenu.setTitleText(text);
     }
+
+    public PauseMenu getPauseMenu() {
+        return pauseMenu;
+    }
 }

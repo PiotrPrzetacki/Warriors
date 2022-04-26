@@ -163,21 +163,23 @@ public abstract class CharacterClass implements BaseClass {
         reduceAbilityTimeout(Abilities.ATTACK);
         if(direction==1){
             for(int i=0; i<attackDistance; i++){
-                if(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
-                    CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1];
-                    attackedPlayer.reduceHealth(this.attackAmount);
-                    gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
-                }
+                try {
+                    if(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
+
+                        gameField.attack(CharacterClass.occupiedCells[this.getX() + (Constants.CHARACTER_WIDTH * (i + 1))][this.getY()], getAttackAmount());
+                    }
+                    break;
+                }catch (ArrayIndexOutOfBoundsException ignored){}
             }
         }
         else if(direction==-1){
             for(int i=0; i<attackDistance; i++){
-                if(CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] > 0){
-                    CharacterClass attackedPlayer = players[CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH*(i+1))][this.getY()] - 1];
-                    attackedPlayer.reduceHealth(this.attackAmount);
-                    gameField.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), gameField.getFreeObjects()));
-                    break;
-                }
+                try {
+                    if (CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH * (i + 1))][this.getY()] > 0) {
+                        gameField.attack(CharacterClass.occupiedCells[this.getX() - (Constants.CHARACTER_WIDTH * (i + 1))][this.getY()], getAttackAmount());
+                        break;
+                    }
+                }catch (ArrayIndexOutOfBoundsException ignored){}
             }
         }
     }
@@ -202,31 +204,6 @@ public abstract class CharacterClass implements BaseClass {
         if(abilityTimeouts.containsKey(ability)) {
             abilityTimeouts.get(ability)[0] = abilityTimeouts.get(ability)[1];
         }
-    }
-
-    @Override
-    public void restoreHealth(int amount) {
-        setHealthPoints(this.getMaxHealthPoints() + amount);
-    }
-
-    @Override
-    public void loseHealth(int amount) {
-        setHealthPoints(this.getMaxHealthPoints() - amount);
-    }
-
-    @Override
-    public void restoreMana(int amount) {
-        setManaPoints(this.getMaxManaPoints() + amount);
-    }
-
-    @Override
-    public void loseMana(int amount) {
-        setManaPoints(this.getMaxManaPoints() - amount);
-    }
-
-    @Override
-    public void levelUp() {
-        setLevel(getLevel() + 1);
     }
 
     @Override

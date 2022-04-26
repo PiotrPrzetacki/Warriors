@@ -27,6 +27,12 @@ public class HeaderLabel extends JLabel {
                 this.setAlignmentX(Component.CENTER_ALIGNMENT);
                 break;
             }
+            case 4: {
+                this.setFont(Constants.header4Font);
+                this.setHorizontalAlignment(JLabel.CENTER);
+                this.setAlignmentX(Component.CENTER_ALIGNMENT);
+                break;
+            }
         }
     }
     public HeaderLabel(String text, Font font){

@@ -39,10 +39,10 @@ public class Warrior extends CharacterClass {
         int[] target = new int[] {-1, -1};
         for (int i=0; i<CharacterClass.occupiedCells.length; i++){
             for (int j=0; j<CharacterClass.occupiedCells[0].length; j++){
-                int a = (i-getX())*(i-getX());
-                int b = (j-getY())*(j-getY());
-                double currentDistance = Math.sqrt(a + b);
                 if(CharacterClass.occupiedCells[i][j] > 0 && CharacterClass.occupiedCells[i][j] != getNumber()){
+                    int a = (i-getX())*(i-getX());
+                    int b = (j-getY())*(j-getY());
+                    double currentDistance = Math.sqrt(a + b);
                     if(currentDistance<distanceToNearestPlayer){
                         distanceToNearestPlayer = currentDistance;
                         target[0] = i;

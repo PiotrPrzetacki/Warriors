@@ -3,9 +3,11 @@ package com.company.components;
 import com.company.Constants;
 import com.company.MainWindow;
 import com.company.Team;
+import com.company.classes.BaseClass;
 import com.company.classes.CharacterClass;
 import com.company.classes.arenas.Arena;
 import com.company.classes.characters.Abilities;
+import com.company.classes.objects.Blood;
 import com.company.classes.objects.Fireball;
 import com.company.classes.objects.FreeObject;
 import com.company.components.controls.PausePanel;
@@ -13,22 +15,26 @@ import com.company.components.controls.StartGameMenu;
 import com.company.components.layouts.PlayersStats;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GameField extends JPanel {
     private boolean pauseState;
     private boolean playersAbilitiesActivated;
-    private final boolean repaintLoopEnabled;
+    private ScheduledExecutorService repaintExecutor;
     private final Arena arena;
     private final CharacterClass[] players;
     private final PlayersStats playersStats;
     private final PausePanel pausePanel;
     private final StartGameMenu startGameMenu;
-    private List<FreeObject> freeObjects;
+    private final List<FreeObject> freeObjects;
 
     public GameField(MainWindow mainWindow, Team team, Arena arena) {
         this.players = team.getTeamMembers();
@@ -36,9 +42,9 @@ public class GameField extends JPanel {
         this.playersStats = new PlayersStats(players);
         this.pausePanel = new PausePanel(mainWindow, "Game NOT paused");
         this.startGameMenu = new StartGameMenu(this);
-        this.repaintLoopEnabled = true;
         this.pauseState = true;
         this.freeObjects = new ArrayList<>();
+        this.repaintExecutor = Executors.newSingleThreadScheduledExecutor();
 
         mainWindow.setSize(Constants.WINDOW_WIDTH+15, Constants.WINDOW_HEIGHT+42);
         setLayout(new BorderLayout());
@@ -56,6 +62,17 @@ public class GameField extends JPanel {
         addKeyListener(new FieldKeyListener(this));
     }
 
+    private void paintCharacters(Graphics g){
+        for (CharacterClass player : players) {
+            g.drawImage(player.getImage(), player.getX(), player.getY(), this);
+            g.drawString(player.getName(), player.getX(), player.getY()+12);
+        }
+
+        if(this instanceof MonstersAttackGameField){
+            ((MonstersAttackGameField) this).paintMonsters(g);
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -64,10 +81,8 @@ public class GameField extends JPanel {
             checkGameOver();
         }
 
-        for (CharacterClass player : players) {
-            g.drawImage(player.getImage(), player.getX(), player.getY(), this);
-            g.drawString(player.getName(), player.getX(), player.getY()+12);
-        }
+        paintCharacters(g);
+
         for (int i=0; i<CharacterClass.occupiedCells.length; i++){
             for (int j=0; j<CharacterClass.occupiedCells[0].length; j++){
                 if(CharacterClass.occupiedCells[i][j] == -1){
@@ -78,26 +93,30 @@ public class GameField extends JPanel {
                 }
                 else if(arena.getSpecialSquares()[i][j] == -3){
                     g.drawImage(arena.getIcySquareImage(), i, j, this);
-                    for (CharacterClass player : players) {
-                        g.drawImage(player.getImage(), player.getX(), player.getY(), this);
-                        g.drawString(player.getName(), player.getX(), player.getY()+12);
-                    }
+                    paintCharacters(g);
                 }
             }
         }
-        for(int i=0; i<freeObjects.size(); i++){
-            FreeObject obj = freeObjects.get(i);
-            if(obj instanceof Fireball){
-                g.drawImage(obj.getImageToDraw(), obj.getX()-obj.getImageToDraw().getWidth(null)/2,
-                         obj.getY()-obj.getImageToDraw().getHeight(null)/2, this);
-            } else {
-                g.drawImage(obj.getImageToDraw(), obj.getX(), obj.getY(), this);
+        try {
+            for (FreeObject obj : freeObjects) {
+                if (obj instanceof Fireball) {
+                    g.drawImage(obj.getImageToDraw(), obj.getX() - obj.getImageToDraw().getWidth(null) / 2,
+                            obj.getY() - obj.getImageToDraw().getHeight(null) / 2, this);
+                } else {
+                    g.drawImage(obj.getImageToDraw(), obj.getX(), obj.getY(), this);
+                }
             }
-        }
+        }catch (ConcurrentModificationException ignored){}
+    }
+
+    public void attack(int attackedCharacterNumber, int attackAmount){
+        CharacterClass attackedPlayer = this.getPlayers()[attackedCharacterNumber - 1];
+        attackedPlayer.reduceHealth(attackAmount);
+        this.getFreeObjects().add(new Blood(attackedPlayer.getX(), attackedPlayer.getY(), this.getFreeObjects()));
     }
 
     public class FieldKeyListener extends KeyAdapter {
-        private GameField gameField;
+        private final GameField gameField;
         public FieldKeyListener(GameField gameField){
             this.gameField = gameField;
         }
@@ -149,11 +168,7 @@ public class GameField extends JPanel {
                     }
                 }
             }
-            if(key == KeyEvent.VK_Y){
-                arena.setEventEnabled(false);
-                System.out.println((players[0].getX()/40) + " " + (players[0].getY())/80);
-            }
-            else if(key == KeyEvent.VK_ESCAPE){
+            if(key == KeyEvent.VK_ESCAPE){
                 pauseState = !pauseState;
                 pauseGame(pauseState);
             }
@@ -183,14 +198,14 @@ public class GameField extends JPanel {
     }
 
     private void setRepaintLoop(){
-        new Timer(20, e -> repaint()).start();
+        repaintExecutor.scheduleAtFixedRate(this::repaint, 0, 30, TimeUnit.MILLISECONDS);
     }
 
     public Arena getArena() {
         return arena;
     }
 
-    private void pauseGame(boolean pauseState){
+    protected void pauseGame(boolean pauseState){
         pausePanel.refresh();
         if(pauseState) {
             remove(pausePanel);
@@ -201,7 +216,7 @@ public class GameField extends JPanel {
         pausePanel.refresh();
     }
 
-    private void checkGameOver(){
+    protected void checkGameOver(){
         for(CharacterClass player : players){
             if(player.getHealthPoints()<=0){
                 for(CharacterClass winningPlayer : players){
@@ -216,7 +231,9 @@ public class GameField extends JPanel {
     }
 
     public void closeGameField(){
+        CharacterClass.resetOccupiedCells();
         arena.closeArena();
+        repaintExecutor.shutdown();
         startGameMenu.getStartGameWorker().cancel(true);
     }
 
@@ -230,5 +247,13 @@ public class GameField extends JPanel {
 
     public CharacterClass[] getPlayers() {
         return players;
+    }
+
+    public PausePanel getPausePanel() {
+        return pausePanel;
+    }
+
+    public void setPauseState(boolean pauseState) {
+        this.pauseState = pauseState;
     }
 }
