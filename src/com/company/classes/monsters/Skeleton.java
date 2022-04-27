@@ -197,7 +197,7 @@ public class Skeleton extends Monster{
         return null;
     }
 
-    private class Node{
+    private static class Node{
         public int x, y;
         public double f, g, h;
         public Node parent;

@@ -79,7 +79,7 @@ public abstract class Monster implements BaseClass {
     @Override
     public void reduceHealth(int amount) {
         healthPoints -= amount;
-        if(healthPoints<0){
+        if(healthPoints<=0){
             killMonster();
         }
     }
