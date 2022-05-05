@@ -3,11 +3,14 @@ package com.company.classes.monsters;
 import com.company.Constants;
 import com.company.classes.CharacterClass;
 import com.company.components.MonstersAttackGameField;
+import com.company.utils.Node;
 
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static com.company.utils.Pathfinder.getNextSquare;
 
 public class Skeleton extends Monster{
 
@@ -76,7 +79,7 @@ public class Skeleton extends Monster{
     }
 
     private void move(){
-        int[] path = getNextSquare(getTarget());
+        int[] path = getNextSquare(new int[]{getX(), getY()}, getTarget());
         if(!isOutsideGameField()) {
             CharacterClass.occupiedCells[getX()][getY()] = 0;
         }
@@ -109,112 +112,7 @@ public class Skeleton extends Monster{
         return target;
     }
 
-    private int[] getNextSquare(int[] target){
-        int[] src = new int[] {getX()/Constants.CHARACTER_WIDTH, getY()/Constants.CHARACTER_HEIGHT};
-        int[] dest = new int[] {target[0]/Constants.CHARACTER_WIDTH, target[1]/Constants.CHARACTER_HEIGHT};
-        int[] res = aStarSearch(src, dest);
-        if(res != null) {
-            return new int[]{res[0] * Constants.CHARACTER_WIDTH, res[1] * Constants.CHARACTER_HEIGHT};
-        }
-        else{
-            return new int[]{getX(), getY()};
-        }
-    }
-
     private boolean isOutsideGameField(){
         return getX() < 0 || getX() >= Constants.WINDOW_WIDTH || getY() < 0 || getY() >= Constants.WINDOW_HEIGHT;
-    }
-
-    private List<Node> traceBack(Node lastNode){
-        List<Node> res = new ArrayList<>();
-        res.add(lastNode);
-        while (lastNode.parent != null){
-            lastNode = lastNode.parent;
-            res.add(lastNode);
-        }
-        return res;
-    }
-
-    private int[] aStarSearch(int[] src, int[] dest)
-    {
-        List<Node> openList = new ArrayList<>();
-        List<Node> closedList = new ArrayList<>();
-        openList.add(new Node(src[0], src[1], 0, null));
-
-        if(src[0]==dest[0] && src[1]==dest[1]){
-            return null;
-        }
-
-        while (!openList.isEmpty()) {
-            Node q = openList.get(0);
-            for (Node node : openList) {
-                if (node.f < q.f) {
-                    q = node;
-                }
-            }
-            openList.remove(q);
-            List<Node> successors = new ArrayList<>();
-            successors.add(new Node(q.x, q.y - 1, 0, q));
-            successors.add(new Node(q.x, q.y + 1, 0, q));
-            successors.add(new Node(q.x - 1, q.y, 0, q));
-            successors.add(new Node(q.x + 1, q.y, 0, q));
-            Collections.shuffle(successors);
-            s:
-            for (Node successor : successors) {
-                if (successor.x == dest[0] && successor.y == dest[1]) {
-                    List<Node> path = traceBack(successor);
-                    if(path.size()>2) {
-                        Node nextNode = path.get(path.size() - 2);
-                        return new int[]{nextNode.x, nextNode.y};
-                    }else{
-                        return null;
-                    }
-                } else {
-                    successor.g = q.g + 1;
-                    successor.h = Math.abs(successor.x - dest[0]) + Math.abs(successor.y - dest[1]);
-                    successor.f = successor.g + successor.h;
-                }
-                for (Node node : openList) {
-                    if (node.x == successor.x && node.y == successor.y && node.f < successor.f) {
-                        continue s;
-                    }
-                }
-                for (Node node : closedList) {
-                    if (node.x == successor.x && node.y == successor.y && node.f < successor.f) {
-                        continue s;
-                    }
-                }
-                try {
-                    if (CharacterClass.occupiedCells[successor.x * Constants.CHARACTER_WIDTH][successor.y * Constants.CHARACTER_HEIGHT] == -1 ||
-                            CharacterClass.occupiedCells[successor.x * Constants.CHARACTER_WIDTH][successor.y * Constants.CHARACTER_HEIGHT] > 0) {
-                        continue;
-                    }
-                } catch (ArrayIndexOutOfBoundsException ignored) {}
-                openList.add(successor);
-            }
-            closedList.add(q);
-        }
-        return null;
-    }
-
-    private static class Node{
-        public int x, y;
-        public double f, g, h;
-        public Node parent;
-
-        public Node(int x, int y, double f, Node parent) {
-            this.x = x;
-            this.y = y;
-            this.f = f;
-            this.parent = parent;
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "x=" + x +
-                    ", y=" + y +
-                    '}';
-        }
     }
 }
