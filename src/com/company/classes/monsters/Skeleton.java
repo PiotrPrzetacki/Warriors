@@ -71,6 +71,8 @@ public class Skeleton extends Monster{
 
     @Override
     public void killMonster() {
+        gameField.setPoints(gameField.getPoints()
+                + new Random().ints(80, 120).findFirst().getAsInt());
         if(!isOutsideGameField()) {
             CharacterClass.occupiedCells[getX()][getY()] = 0;
         }

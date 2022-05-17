@@ -76,8 +76,9 @@ public class PauseMenu extends JPanel {
         return infoPanel;
     }
 
-    public void addWaveInfo(int wavesSurvived){
+    public void addWaveInfo(int wavesSurvived, int points){
         infoPanel.add(new HeaderLabel("You survived "+wavesSurvived+" waves", 4));
+        infoPanel.add(new HeaderLabel("Your points:  "+points, 4));
         revalidate();
     }
 }

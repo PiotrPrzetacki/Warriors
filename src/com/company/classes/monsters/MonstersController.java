@@ -22,6 +22,7 @@ public class MonstersController {
     }
 
     public void startNextWave(int wave){
+        gameField.setPoints(gameField.getPoints() + 35*wave);
         System.gc();
         for(int i=1; i<=wave; i++){
             int[] newPos = getMonsterSpawn();

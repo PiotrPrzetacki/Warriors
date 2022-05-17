@@ -64,7 +64,7 @@ public class MonstersAttackGameField extends GameField{
         pauseGame(false);
         setPauseState(false);
         getPausePanel().setPauseText("You died");
-        getPausePanel().getPauseMenu().addWaveInfo(wave-1);
+        getPausePanel().getPauseMenu().addWaveInfo(wave-1, points);
     }
 
     @Override
